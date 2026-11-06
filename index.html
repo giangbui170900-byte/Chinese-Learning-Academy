@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chinese Learning Academy</title>
+<style>
+:root{--navy:#142544;--blue:#3568e8;--sky:#eaf1ff;--green:#22a477;--red:#d64545;--ink:#17243b;--muted:#6b778c;--line:#e7ebf2;--bg:#f5f7fb;--white:#fff;--orange:#f4a340}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI","Noto Sans SC","PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;background:var(--bg);color:var(--ink)}
+button,input,select{font:inherit}button{cursor:pointer;border:0}a{color:inherit;text-decoration:none}
+:focus-visible{outline:3px solid #86a8ff;outline-offset:2px}
+.app{display:flex;min-height:100vh}
+.sidebar{width:250px;background:var(--navy);color:#dbe5f7;padding:24px 16px;position:fixed;inset:0 auto 0 0;overflow:auto;z-index:5}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;color:white;font-size:17px;margin:0 8px 30px}
+.logo{width:35px;height:35px;border-radius:11px;background:#4f83ff;display:grid;place-items:center;color:#fff;font-size:20px}
+.navlabel{font-size:10px;letter-spacing:1.4px;color:#8da0c2;margin:22px 12px 9px}
+.nav{display:flex;align-items:center;gap:12px;padding:12px;border-radius:10px;margin:3px 0;color:#c6d3e8;font-size:14px}
+.nav:hover,.nav.active{background:#263b60;color:white}.nav .ico{width:20px;text-align:center;font-size:17px}
+.side-bottom{margin-top:28px;padding:15px;background:#203455;border-radius:12px;font-size:12px;color:#b8c8e3;line-height:1.5}
+.main{margin-left:250px;width:calc(100% - 250px);padding:28px 34px 60px}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px;gap:12px}
+.eyebrow{color:var(--muted);font-size:13px}.h1{font-size:26px;font-weight:800;margin:5px 0}
+.top-actions{display:flex;gap:10px;align-items:center}
+.pill{background:white;border:1px solid var(--line);padding:9px 13px;border-radius:12px;font-size:13px}
+.avatar{background:#dce8ff;color:#315bd0;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-weight:700}
+.page{display:none}.page.active{display:block}
+.grid{display:grid;gap:16px}.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:18px}
+.card{background:white;border:1px solid var(--line);border-radius:16px;padding:19px;box-shadow:0 3px 12px #14254405}
+.stat{display:flex;gap:13px;align-items:center}
+.stat-icon{width:43px;height:43px;border-radius:13px;background:var(--sky);display:grid;place-items:center;font-size:20px;flex:none}
+.stat-label{font-size:12px;color:var(--muted)}.stat-num{font-size:25px;font-weight:800;margin:3px 0}.stat-sub{font-size:11px;color:var(--green)}
+.hero{background:linear-gradient(115deg,#1e3762,#3158a5);color:white;border-radius:18px;padding:25px 28px;display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;gap:20px}
+.hero h2{font-size:23px;margin:7px 0}.hero p{color:#d4e0fa;margin:0 0 16px;font-size:14px}
+.btn{display:inline-block;padding:11px 16px;border-radius:10px;background:var(--blue);color:white;font-weight:650;font-size:13px;text-align:center}
+.btn:hover{filter:brightness(.95)}.btn.white{background:white;color:#254a9c}.btn.ghost{background:#f1f5ff;color:#315bd0}.btn.green{background:var(--green)}.btn.danger{background:#fdecec;color:var(--red)}.btn.small{padding:8px 12px}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.hero-art{font-size:68px;opacity:.9;padding:0 20px}
+.two{grid-template-columns:1.5fr 1fr}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin:23px 0 13px;gap:10px}
+.section-head h3{margin:0;font-size:17px}.muted{color:var(--muted);font-size:13px}
+.progress{height:8px;background:#edf1f7;border-radius:99px;overflow:hidden}.progress>span{display:block;height:100%;background:var(--blue);border-radius:99px;transition:width .3s}
+.task{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}.task:last-child{border-bottom:0}
+.task-icon{width:38px;height:38px;background:#f1f5ff;border-radius:11px;display:grid;place-items:center;flex:none}
+.task-info{flex:1}.task-info b{font-size:13px;display:block}.task-info small{color:var(--muted)}
+.check{accent-color:var(--green);width:17px;height:17px}
+.chart{height:180px;display:flex;align-items:end;justify-content:space-around;gap:12px;padding:18px 8px 0}
+.barwrap{height:100%;display:flex;flex-direction:column;justify-content:end;align-items:center;gap:8px;flex:1}
+.bar{width:70%;max-width:32px;background:#c9d8ff;border-radius:7px 7px 2px 2px;min-height:5px}.bar.current{background:var(--blue)}.barlabel{font-size:11px;color:var(--muted)}
+.levels{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.level{border:1px solid var(--line);border-radius:13px;padding:15px;background:white}.level h4{margin:0 0 5px}.level p{font-size:12px;color:var(--muted);margin:0 0 12px}.level.lock{opacity:.6;background:#fafbfc}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:15px 0;align-items:center}
+.field{padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:white;min-width:160px;color:var(--ink)}
+.lesson-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.lesson-card{display:flex;gap:14px;align-items:flex-start}
+.lesson-num{background:#edf3ff;color:#315bd0;font-weight:800;border-radius:12px;padding:12px;flex:none}
+.lesson-card h3{font-size:15px;margin:2px 0 6px}.lesson-card p{font-size:13px;color:var(--muted);margin:0 0 12px;line-height:1.5}
+.tag{font-size:11px;background:#eef8f4;color:#16805b;border-radius:20px;padding:5px 8px;display:inline-block;margin-right:5px}
+.lesson-content{max-width:850px}.lesson-content h2{font-size:25px}.lesson-content h3{margin-top:25px}.lesson-content p,.lesson-content li{line-height:1.8}
+.cn{font-size:24px;font-weight:700}.py{color:#315bd0;font-size:14px}.meaning{color:var(--muted)}
+.example{background:#f5f8ff;border-left:4px solid var(--blue);padding:13px 16px;border-radius:8px;margin:10px 0}
+.exercise{background:#fff8e9;border:1px solid #f4e3bc;border-radius:13px;padding:16px;margin-top:20px}
+.answer{background:white;border:1px dashed #e2c887;border-radius:10px;padding:10px 12px;margin:10px 0;display:none}
+.answer.show{display:block}
+.lesson-nav{display:flex;justify-content:space-between;gap:10px;margin-top:22px;flex-wrap:wrap}
+.options{display:grid;gap:8px;margin:12px 0}
+.option{display:block;border:1px solid var(--line);padding:10px;border-radius:9px;background:white;text-align:left;cursor:pointer}
+.option:has(input:checked){border-color:var(--blue);background:#eff4ff}
+.option.correct{border-color:var(--green);background:#eafaf3}.option.wrong{border-color:var(--red);background:#fdeeee}
+.flash-area{max-width:620px;margin:20px auto;text-align:center}
+.flashcard{min-height:280px;padding:24px;border:1px solid #dfe7f5;border-radius:20px;background:linear-gradient(140deg,#fff,#f4f7ff);display:flex;align-items:center;justify-content:center;flex-direction:column;cursor:pointer;box-shadow:0 8px 30px #253b6510;white-space:normal;word-break:break-word}
+.flashcard .big{font-size:55px;font-weight:800}.flashcard .hint{color:var(--muted);margin-top:12px}
+.flash-actions{display:flex;justify-content:center;gap:10px;margin:18px;flex-wrap:wrap}
+.timer{text-align:center;padding:28px}.timer-display{font-size:64px;font-weight:800;letter-spacing:2px;color:var(--navy);margin:20px}
+.timer-controls{display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+table{border-collapse:collapse;width:100%}th,td{text-align:left;padding:12px;border-bottom:1px solid var(--line);font-size:13px;vertical-align:top}th{color:var(--muted);font-weight:600}
+.word{font-size:23px;font-weight:700}.wordrow{display:flex;align-items:center;gap:12px}
+.star{background:none;font-size:20px;color:#b8c3d4}.star.on{color:#f5aa25}
+.speakbtn{background:#f1f5ff;border-radius:8px;padding:5px 8px;font-size:13px}
+.toast{position:fixed;right:24px;bottom:24px;background:#142544;color:white;padding:13px 18px;border-radius:12px;box-shadow:0 8px 25px #0002;display:none;z-index:10;max-width:calc(100% - 48px)}
+.empty{padding:35px;text-align:center;color:var(--muted)}
+.drill{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.drill button{background:#f1f5ff;color:#254a9c;padding:9px 13px;border-radius:10px;font-weight:600}
+.drill button b{font-size:18px;margin-right:4px}
+.tok{display:inline-block;text-align:center;margin:4px 8px 4px 0;padding:6px 10px;background:white;border:1px solid var(--line);border-radius:10px}
+.tok.unk{border-color:#f0b4b4;background:#fff4f4}
+.footer-tools{margin-top:30px;text-align:center}
+@media(max-width:1050px){.stats{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}.levels{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:720px){
+.sidebar{width:72px;padding:18px 9px}.brand{justify-content:center;margin:0 0 25px}.brand span,.navlabel,.nav .txt,.side-bottom{display:none}
+.nav{justify-content:center;padding:13px 7px}.main{margin-left:72px;width:calc(100% - 72px);padding:20px 14px 40px}
+.topbar{align-items:flex-start}.h1{font-size:21px}.top-actions .pill{display:none}.hero{padding:20px}.hero-art{display:none}
+.stats{gap:9px}.card{padding:14px}.stat{gap:8px}.stat-icon{width:35px;height:35px}.stat-num{font-size:21px}
+.lesson-list{grid-template-columns:1fr}.levels{grid-template-columns:1fr}.flashcard{min-height:230px}.timer-display{font-size:48px}
+.field{min-width:0;flex:1 1 140px}.flashcard .big{font-size:44px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand"><div class="logo" lang="zh-CN">文</div><span>Chinese Academy</span></div>
+  <div class="navlabel">HỌC TẬP</div>
+  <a class="nav" href="#dashboard" data-page="dashboard" title="Dashboard"><span class="ico">▦</span><span class="txt">Dashboard</span></a>
+  <a class="nav" href="#roadmap" data-page="roadmap" title="Lộ trình học"><span class="ico">🧭</span><span class="txt">Lộ trình học</span></a>
+  <a class="nav" href="#lessons" data-page="lessons" title="Bài học"><span class="ico">📚</span><span class="txt">Bài học</span></a>
+  <a class="nav" href="#vocabulary" data-page="vocabulary" title="Từ vựng"><span class="ico" lang="zh-CN">字</span><span class="txt">Từ vựng</span></a>
+  <a class="nav" href="#flashcards" data-page="flashcards" title="Flashcards"><span class="ico">🗂</span><span class="txt">Flashcards</span></a>
+  <a class="nav" href="#grammar" data-page="grammar" title="Ngữ pháp"><span class="ico">✍</span><span class="txt">Ngữ pháp</span></a>
+  <div class="navlabel">LUYỆN TẬP</div>
+  <a class="nav" href="#pronunciation" data-page="pronunciation" title="Nghe &amp; phát âm"><span class="ico">🎧</span><span class="txt">Nghe &amp; phát âm</span></a>
+  <a class="nav" href="#quiz" data-page="quiz" title="Quiz &amp; kiểm tra"><span class="ico">✓</span><span class="txt">Quiz &amp; kiểm tra</span></a>
+  <a class="nav" href="#planner" data-page="planner" title="Study Planner"><span class="ico">◷</span><span class="txt">Study Planner</span></a>
+  <a class="nav" href="#tutor" data-page="tutor" title="Trợ lý học tập"><span class="ico">🤖</span><span class="txt">Trợ lý học tập</span></a>
+  <div class="side-bottom"><span lang="zh-CN">学习 · 每天进步</span><br>Học đều mỗi ngày, tiến bộ từng bước.</div>
+</aside>
+<main class="main">
+<header class="topbar"><div><div class="eyebrow"><span lang="zh-CN">你好！</span> · MỖI NGÀY MỘT CHÚT</div><div class="h1" id="pageTitle">Chào bạn, bắt đầu học nhé 👋</div></div><div class="top-actions"><div class="pill">🎯 Mục tiêu: 120 phút/ngày</div><div class="avatar" lang="zh-CN">学</div></div></header>
+
+<section class="page active" id="dashboard">
+<div class="hero"><div><span class="tag">FOUNDATION · BẮT ĐẦU TỪ SỐ 0</span><h2>Học tiếng Trung theo lộ trình của bạn</h2><p>Hôm nay chỉ cần tiến thêm một bước nhỏ.</p><a class="btn white" id="continueBtn" href="#lesson-0">▶ Tiếp tục học →</a></div><div class="hero-art" lang="zh-CN">汉</div></div>
+<div class="grid stats">
+ <div class="card stat"><div class="stat-icon">🔥</div><div><div class="stat-label">Chuỗi ngày học liên tiếp</div><div class="stat-num" id="streak">0 ngày</div><div class="stat-sub" id="streakSub">Bắt đầu tạo streak!</div></div></div>
+ <div class="card stat"><div class="stat-icon">⏱</div><div><div class="stat-label">Tổng thời gian học</div><div class="stat-num" id="totalTime">0 phút</div><div class="stat-sub">Đã ghi nhận</div></div></div>
+ <div class="card stat"><div class="stat-icon" lang="zh-CN">字</div><div><div class="stat-label">Từ đã thuộc</div><div class="stat-num" id="knownCount">0</div><div class="stat-sub">Trong kho từ vựng</div></div></div>
+ <div class="card stat"><div class="stat-icon">🏁</div><div><div class="stat-label">Bài đã hoàn thành</div><div class="stat-num" id="lessonCount">0/5</div><div class="stat-sub">Foundation</div></div></div>
+</div>
+<div class="grid two">
+ <div class="card"><div class="section-head"><h3>📈 Tiến độ học 7 ngày qua</h3><span class="muted">Phút / ngày</span></div><div class="chart" id="weeklyChart"></div><div class="muted" style="text-align:center">Mục tiêu mỗi ngày: 120 phút</div></div>
+ <div class="card"><div class="section-head"><h3>🎯 Nhiệm vụ hôm nay</h3><span class="tag" id="todayProgress">0/3</span></div><div id="todayTasks"></div><div class="progress" style="margin-top:12px"><span id="taskProgress" style="width:0%"></span></div></div>
+</div>
+<div class="section-head"><h3>🗺 Tiến độ các cấp độ</h3><a class="muted" href="#roadmap">Xem lộ trình →</a></div>
+<div class="levels" id="dashboardLevels"></div>
+<div class="footer-tools"><button class="btn danger small" id="resetBtn">Xóa toàn bộ tiến độ</button></div>
+</section>
+
+<section class="page" id="roadmap"><div class="card"><h2>Lộ trình từ Foundation đến HSK 5</h2><p class="muted">Đi theo thứ tự; hoàn thành nền tảng trước khi chuyển sang cấp độ tiếp theo. Hiện phiên bản này mới có nội dung Foundation.</p><div id="roadmapList"></div></div></section>
+
+<section class="page" id="lessons"><div class="section-head"><h3>Foundation · 5 bài học</h3><span class="muted">Nội dung dành cho người mới</span></div><div class="lesson-list" id="lessonList"></div></section>
+<section class="page" id="lessonDetail"><a class="btn ghost small" href="#lessons">← Danh sách bài học</a><div class="card lesson-content" id="lessonBody" style="margin-top:15px"></div></section>
+
+<section class="page" id="vocabulary"><div class="section-head"><h3>Kho từ vựng</h3><span class="muted" id="vocabCount"></span></div>
+<div class="toolbar"><input class="field" id="searchWord" placeholder="🔎 Tìm chữ / pinyin (không cần dấu) / nghĩa..." style="flex:1"><select class="field" id="filterLevel"><option value="">Tất cả cấp độ</option><option>Foundation</option><option>HSK 1</option></select><select class="field" id="filterTopic"><option value="">Tất cả chủ đề</option></select><select class="field" id="filterStatus"><option value="">Tất cả trạng thái</option><option value="known">Đã thuộc</option><option value="unknown">Chưa thuộc</option><option value="fav">Yêu thích ★</option></select></div>
+<div class="card" style="overflow:auto"><table><thead><tr><th>TỪ / PINYIN</th><th>NGHĨA &amp; VÍ DỤ</th><th>CHỦ ĐỀ</th><th>ĐÃ THUỘC</th><th>★</th></tr></thead><tbody id="vocabRows"></tbody></table></div></section>
+
+<section class="page" id="flashcards"><div class="section-head"><h3>Flashcards · Ôn tập chủ động</h3><span class="muted" id="flashPosition">1 / 1</span></div>
+<div class="flash-area">
+<div class="toolbar" style="justify-content:center"><select class="field" id="flashMode"><option value="all">Tất cả từ</option><option value="unknown">Chỉ từ chưa thuộc</option></select><button class="btn ghost small" id="flashShuffle">🔀 Trộn thẻ</button><button class="btn ghost small" id="flashSpeak">🔊 Nghe</button></div>
+<div class="flashcard" id="flashcard" tabindex="0" role="button" aria-label="Thẻ từ vựng, nhấn để lật"></div>
+<div class="flash-actions"><button class="btn ghost" id="flashPrev">← Trước</button><button class="btn" id="flashFlip">Lật thẻ</button><button class="btn ghost" id="flashNext">Tiếp →</button></div>
+<div class="flash-actions"><button class="btn ghost" id="flashNo">↻ Chưa nhớ</button><button class="btn green" id="flashYes">✓ Đã nhớ</button></div>
+<p class="muted">Phím tắt: Space/Enter = lật · ← → = chuyển thẻ. “Chưa nhớ” đẩy thẻ xuống cuối bộ để ôn lại; “Đã nhớ” đánh dấu từ đó là đã thuộc trong Kho từ vựng.</p></div></section>
+
+<section class="page" id="grammar"><div class="section-head"><h3>Ngữ pháp nền tảng</h3><span class="tag">Foundation</span></div><div class="grid two" id="grammarCards"></div></section>
+
+<section class="page" id="pronunciation"><div class="card"><h2>🎧 Nghe &amp; phát âm</h2><p class="muted">Dùng giọng đọc zh-CN có sẵn trong trình duyệt nếu thiết bị hỗ trợ. Đây là giọng tổng hợp (TTS), không phải chấm điểm phát âm.</p>
+<div class="toolbar"><input class="field" id="speakText" value="你好，我叫小明。" lang="zh-CN" style="flex:1"><button class="btn" id="speakBtn">🔊 Nghe tiếng Trung</button><button class="btn ghost" id="stopBtn">Dừng</button></div>
+<div class="example"><b>Shadowing 3 bước</b><ol><li>Nghe câu 2–3 lần, chú ý thanh điệu.</li><li>Đọc theo ngay sau audio, giữ nhịp và ngữ điệu.</li><li>Ghi âm ngay tại đây, nghe lại và tự đối chiếu với audio mẫu.</li></ol>
+<div class="toolbar"><button class="btn green small" id="recBtn">🎙 Ghi âm</button><audio id="recPlayer" controls style="display:none;max-width:100%"></audio></div><div class="muted">Bản ghi chỉ nằm trên trình duyệt của bạn, không được tải lên đâu cả.</div></div>
+<h3>Bật hơi: b/p · d/t · g/k</h3><p>p, t, k bật hơi mạnh hơn b, d, g. Thử đặt một mảnh giấy trước miệng để cảm nhận luồng hơi.</p><div class="drill" id="aspDrill"></div>
+<h3>Bốn thanh điệu</h3><div class="drill" id="toneDrill"></div>
+<p class="muted">Mỗi nút đọc bằng chữ Hán tương ứng để giọng TTS đọc đúng âm.</p></div></section>
+
+<section class="page" id="quiz"><div class="card" id="quizBox"><div class="section-head"><h3>Kiểm tra nhanh · Foundation</h3><span class="tag" id="quizTag">5 câu</span></div><p class="muted">5 câu ngẫu nhiên từ ngân hàng câu hỏi, đáp án được xáo trộn mỗi lần.</p><div id="quizQuestions"></div><button class="btn" id="quizSubmit">Nộp bài &amp; xem kết quả</button> <button class="btn ghost" id="quizNew">↻ Làm bài mới</button><div id="quizResult"></div></div><div class="card" style="margin-top:15px"><h3>Lịch sử kiểm tra</h3><div id="quizHistory" class="muted">Chưa có bài kiểm tra.</div></div></section>
+
+<section class="page" id="planner"><div class="grid two"><div class="card timer"><span class="tag">DAILY STUDY PLAN</span><h2>Phiên học tập</h2>
+<select class="field" id="timerDur"><option value="15">15 phút</option><option value="25" selected>25 phút (Pomodoro)</option><option value="45">45 phút</option></select>
+<div class="timer-display" id="timerDisplay" aria-live="off">25:00</div><div class="muted" id="timerStatus">Pomodoro · 25 phút</div>
+<div class="timer-controls"><button class="btn" id="timerStart">▶ Bắt đầu</button><button class="btn ghost" id="timerPause">Ⅱ Tạm dừng</button><button class="btn ghost" id="timerReset">↺ Đặt lại</button></div>
+<p class="muted" style="margin-top:20px">Phiên hoàn thành sẽ tự được ghi nhận. Nếu dừng giữa chừng, bấm “Ghi nhận” để lưu số phút đã học (tối thiểu 1 phút).</p><button class="btn green" id="timerRecord">＋ Ghi nhận phiên hiện tại</button></div>
+<div class="card"><h3>Lịch học 120 phút/ngày</h3><p class="muted">Tích vào mục đã học xong để cộng thời gian vào hôm nay (bỏ tích để trừ lại).</p><div id="studyPlan"></div><div class="progress"><span id="dailyProgress" style="width:0%"></span></div><p class="muted" id="dailyText">0 / 120 phút hôm nay</p></div></div>
+<div class="card" style="margin-top:16px"><h3>Ghi nhận thời gian học</h3><div id="studyHistory" class="muted">Chưa có phiên học.</div></div></section>
+
+<section class="page" id="tutor"><div class="card"><h2>🤖 Trợ lý học tập (offline)</h2><p>Chưa kết nối AI tạo sinh. Công cụ dưới đây hoạt động offline dựa trên kho từ vựng và các câu mẫu có sẵn; nó không hiểu được câu tùy ý.</p>
+<div class="toolbar"><select class="field" id="tutorMode"><option value="explain">Phân tích câu</option><option value="translate">Dịch Trung → Việt</option><option value="practice">Bài tập Việt → Trung</option></select><input class="field" id="tutorInput" lang="zh-CN" placeholder="Nhập câu tiếng Trung, ví dụ: 你好吗" style="flex:1"><button class="btn" id="tutorGo">Thực hiện</button></div>
+<div id="tutorOutput" class="example">Ví dụ: nhập 我叫安 hoặc 你叫什么名字 rồi bấm “Thực hiện”.</div>
+<p class="muted">Muốn bật AI tạo sinh cần cấu hình backend/API key; không nên đặt API key trực tiếp trong HTML client.</p></div></section>
+</main></div><div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm=s=>String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/Đ/g,'D').toLowerCase();
+const stripP=s=>String(s).replace(/[\s，。？！、,.?!；;：:“”"']/g,'');
+const ymd=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const today=()=>ymd(new Date());
+
+/* ===== DỮ LIỆU ===== */
+const lessons=[
+{title:"Tổng quan tiếng Trung & Pinyin",time:25,goal:"Hiểu hệ chữ giản thể, âm tiết và cách Pinyin biểu thị âm.",say:"妈妈",
+q:"Pinyin dùng để làm gì?",ans:"Pinyin là hệ thống ghi âm bằng chữ Latin, giúp đọc chữ Hán; nó không thay thế chữ Hán.",
+content:`<h3>1. Tiếng Trung phổ thông là gì?</h3><p>Mandarin (普通话) là tiếng phổ thông Trung Quốc. Trong khóa này, bạn học <b>chữ giản thể (简体字)</b> và dùng <b>Pinyin</b> để đọc âm. Pinyin là hệ thống ghi âm bằng chữ Latin, không phải cách viết thay thế chữ Hán.</p><h3>2. Một âm tiết Pinyin</h3><p>Âm tiết thường gồm thanh mẫu (phụ âm đầu), vận mẫu (phần còn lại) và thanh điệu. Ví dụ:</p><div class="example"><div class="cn">妈</div><div class="py">mā · thanh mẫu m + vận mẫu a + thanh 1</div><div class="meaning">mẹ</div></div><p>Thanh điệu làm thay đổi nghĩa. Vì vậy, hãy học âm và thanh điệu cùng nhau.</p><h3>3. Cách học hiệu quả</h3><ul><li>Nghe mẫu trước, sau đó nhắc lại.</li><li>Học Pinyin và chữ Hán song song.</li><li>Ôn ngắn mỗi ngày, không chỉ học thuộc một lần.</li></ul>`},
+{title:"Thanh mẫu (声母)",time:30,goal:"Nhận diện nhóm thanh mẫu và phân biệt âm bật hơi/không bật hơi.",say:"八，趴，搭，他，嘎，咖",
+q:"Điểm khác biệt chính giữa b/p, d/t, g/k là gì?",ans:"Khác nhau chủ yếu ở luồng hơi: p, t, k bật hơi; b, d, g không bật hơi.",
+content:`<h3>1. Thanh mẫu là gì?</h3><p>Thanh mẫu là âm đầu của âm tiết. Hệ Pinyin có các nhóm âm: b, p, m, f; d, t, n, l; g, k, h; j, q, x; zh, ch, sh, r; z, c, s; ngoài ra y, w đóng vai trò chính tả ở một số âm tiết.</p><h3>2. Phân biệt bật hơi</h3><p>Trong Mandarin, b/p, d/t, g/k chủ yếu khác nhau ở <b>luồng hơi</b>, không đơn giản là hữu thanh/vô thanh như tiếng Việt.</p><div class="example"><b>Không bật hơi:</b> bā (八), dā (搭), gā (嘎)<br><b>Bật hơi:</b> pā (趴), tā (他), kā (咖)</div><p>Mẹo: đặt bàn tay hoặc giấy mỏng trước miệng; p/t/k tạo luồng hơi rõ hơn b/d/g.</p><h3>3. Âm dễ nhầm</h3><p>j/q/x phát âm với mặt lưỡi trước; zh/ch/sh/r là nhóm quặt lưỡi; z/c/s là nhóm đầu lưỡi. Luyện nghe từng cặp, không đọc theo thói quen tiếng Việt.</p>`},
+{title:"Vận mẫu (韵母)",time:30,goal:"Đọc vận mẫu đơn, kép và một số tổ hợp thường gặp.",say:"鱼，学，月",
+q:"Hãy đọc thử và nêu nghĩa: yú, xué, yuè.",ans:"yú = cá (鱼), xué = học (学), yuè = tháng / mặt trăng (月).",
+content:`<h3>1. Vận mẫu</h3><p>Vận mẫu là phần sau thanh mẫu, có thể là nguyên âm đơn, nguyên âm kép hoặc kết thúc bằng -n/-ng.</p><div class="example"><b>Đơn:</b> a, o, e, i, u, ü<br><b>Kép:</b> ai, ei, ao, ou, ia, ie, ua, uo<br><b>Mũi:</b> an, en, ang, eng, ong</div><h3>2. Chú ý ü</h3><p>ü là âm môi tròn với lưỡi ở vị trí gần i. Sau j, q, x và y, dấu hai chấm được lược bỏ trong chính tả: ju, qu, xu, yu; âm vẫn là ü.</p><h3>3. Ví dụ</h3><div class="example"><div class="cn">鱼 · 学 · 月</div><div class="py">yú · xué · yuè</div><div class="meaning">cá · học · tháng / mặt trăng</div></div><p>Hãy nghe audio, quan sát khẩu hình và luyện chậm trước khi tăng tốc.</p>`},
+{title:"Bốn thanh điệu & thanh nhẹ",time:30,goal:"Nhận biết 4 thanh và thanh nhẹ; hiểu quy tắc biến điệu cơ bản.",say:"妈，麻，马，骂",
+q:"Đọc mā, má, mǎ, mà và nêu nghĩa từng chữ (妈 麻 马 骂).",ans:"mā 妈 = mẹ · má 麻 = cây gai / tê · mǎ 马 = ngựa · mà 骂 = mắng.",
+content:`<h3>1. Bốn thanh điệu</h3><div class="example"><p><b>Thanh 1 (ā):</b> cao, ngang, giữ đều.</p><p><b>Thanh 2 (á):</b> đi lên.</p><p><b>Thanh 3 (ǎ):</b> thấp; trong lời nói thường giữ thấp, không nhất thiết luôn uốn lên đầy đủ.</p><p><b>Thanh 4 (à):</b> đi xuống, dứt khoát.</p><p><b>Thanh nhẹ (a):</b> ngắn, nhẹ, không mang dấu thanh. Ví dụ: 妈妈 māma.</p></div><h3>2. Ví dụ phân biệt</h3><div class="example"><div class="cn">妈 · 麻 · 马 · 骂</div><div class="py">mā · má · mǎ · mà</div><div class="meaning">mẹ · cây gai / tê · ngựa · mắng</div></div><h3>3. Biến điệu thanh 3</h3><p>Khi hai âm tiết thanh 3 đứng liền nhau, âm tiết thứ nhất thường đọc thành thanh 2: <b>你好 nǐ hǎo → ní hǎo</b> (cách đọc thực tế). Pinyin viết vẫn là nǐ hǎo.</p><h3>4. Biến điệu của 不 và 一</h3><p><b>不 bù</b> đọc thành <b>bú</b> trước âm tiết thanh 4: 不是 bú shì.<br><b>一</b>: đứng một mình hoặc đọc số là yī; trước thanh 4 đọc <b>yí</b> (一个 yí ge); trước thanh 1, 2, 3 đọc <b>yì</b> (一天 yì tiān). Pinyin chuẩn thường ghi theo cách đọc thực tế này.</p>`},
+{title:"Chào hỏi & giới thiệu bản thân",time:35,goal:"Chào hỏi, nói tên và hỏi tên người khác bằng câu đơn giản.",say:"你好！我叫安。你叫什么名字？很高兴认识你。",
+q:"Dịch câu: 我叫安。",ans:"Tôi tên An. (Wǒ jiào Ān.)",
+content:`<h3>1. Từ và cụm từ</h3><div class="example"><p><span class="cn">你好</span> <span class="py">nǐ hǎo</span> — Xin chào</p><p><span class="cn">我</span> <span class="py">wǒ</span> — tôi</p><p><span class="cn">叫</span> <span class="py">jiào</span> — tên là / gọi là</p><p><span class="cn">什么</span> <span class="py">shénme</span> — gì</p><p><span class="cn">名字</span> <span class="py">míngzi</span> — tên</p><p><span class="cn">谢谢</span> <span class="py">xièxie</span> — cảm ơn</p><p><span class="cn">再见</span> <span class="py">zàijiàn</span> — tạm biệt</p></div><h3>2. Mẫu câu</h3><div class="example"><p><span class="cn">我叫安。</span><br><span class="py">Wǒ jiào Ān.</span><br>Tôi tên An.</p><p><span class="cn">你叫什么名字？</span><br><span class="py">Nǐ jiào shénme míngzi?</span><br>Bạn tên là gì?</p><p><span class="cn">很高兴认识你。</span><br><span class="py">Hěn gāoxìng rènshi nǐ.</span><br>Rất vui được làm quen với bạn.</p></div><h3>3. Hội thoại</h3><p><b>A:</b> <span class="cn" style="font-size:inherit">你好！我叫安。你叫什么名字？</span><br><span class="py">Nǐ hǎo! Wǒ jiào Ān. Nǐ jiào shénme míngzi?</span></p><p><b>B:</b> <span class="cn" style="font-size:inherit">我叫明。很高兴认识你。</span><br><span class="py">Wǒ jiào Míng. Hěn gāoxìng rènshi nǐ.</span></p><p><b>A:</b> <span class="cn" style="font-size:inherit">我也很高兴。再见！</span><br><span class="py">Wǒ yě hěn gāoxìng. Zàijiàn!</span></p>`}
+];
+/* [chữ, pinyin, nghĩa, từ loại, chủ đề, cấp độ, ví dụ Hán, ví dụ pinyin, ví dụ nghĩa] */
+const vocab=[
+["你好","nǐ hǎo","xin chào","cụm từ","Chào hỏi","Foundation","你好！","Nǐ hǎo!","Xin chào!"],
+["我","wǒ","tôi","đại từ","Giới thiệu bản thân","Foundation","我是学生。","Wǒ shì xuésheng.","Tôi là học sinh/sinh viên."],
+["你","nǐ","bạn","đại từ","Chào hỏi","Foundation","你好吗？","Nǐ hǎo ma?","Bạn khỏe không?"],
+["他","tā","anh ấy; ông ấy","đại từ","Giới thiệu bản thân","Foundation","他是我的朋友。","Tā shì wǒ de péngyou.","Anh ấy là bạn tôi."],
+["叫","jiào","tên là; gọi là","động từ","Giới thiệu bản thân","Foundation","我叫安。","Wǒ jiào Ān.","Tôi tên An."],
+["什么","shénme","gì","đại từ nghi vấn","Chào hỏi","Foundation","你叫什么名字？","Nǐ jiào shénme míngzi?","Bạn tên là gì?"],
+["名字","míngzi","tên","danh từ","Giới thiệu bản thân","Foundation","我的名字是安。","Wǒ de míngzi shì Ān.","Tên tôi là An."],
+["谢谢","xièxie","cảm ơn","động từ","Chào hỏi","Foundation","谢谢你！","Xièxie nǐ!","Cảm ơn bạn!"],
+["再见","zàijiàn","tạm biệt","cụm từ","Chào hỏi","Foundation","明天再见。","Míngtiān zàijiàn.","Ngày mai gặp lại."],
+["好","hǎo","tốt; khỏe","tính từ","Chào hỏi","Foundation","我很好。","Wǒ hěn hǎo.","Tôi rất khỏe."],
+["吗","ma","(trợ từ nghi vấn)","trợ từ","Câu cơ bản","Foundation","你好吗？","Nǐ hǎo ma?","Bạn khỏe không?"],
+["很","hěn","rất","phó từ","Câu cơ bản","Foundation","我很高兴。","Wǒ hěn gāoxìng.","Tôi rất vui."],
+["也","yě","cũng","phó từ","Câu cơ bản","Foundation","我也很高兴。","Wǒ yě hěn gāoxìng.","Tôi cũng rất vui."],
+["的","de","của (trợ từ sở hữu)","trợ từ","Câu cơ bản","Foundation","我的名字是安。","Wǒ de míngzi shì Ān.","Tên tôi là An."],
+["高兴","gāoxìng","vui","tính từ","Chào hỏi","Foundation","很高兴认识你。","Hěn gāoxìng rènshi nǐ.","Rất vui được làm quen với bạn."],
+["认识","rènshi","quen biết; làm quen","động từ","Chào hỏi","Foundation","很高兴认识你。","Hěn gāoxìng rènshi nǐ.","Rất vui được làm quen với bạn."],
+["妈妈","māma","mẹ","danh từ","Gia đình & quan hệ","Foundation","我的妈妈是老师。","Wǒ de māma shì lǎoshī.","Mẹ tôi là giáo viên."],
+["是","shì","là","động từ","Câu cơ bản","HSK 1","我是学生。","Wǒ shì xuésheng.","Tôi là sinh viên."],
+["不","bù","không","phó từ","Câu cơ bản","HSK 1","我不是老师。","Wǒ bú shì lǎoshī.","Tôi không phải giáo viên. (不 đọc bú trước 是)"],
+["学生","xuésheng","học sinh; sinh viên","danh từ","Trường học","HSK 1","我是学生。","Wǒ shì xuésheng.","Tôi là sinh viên."],
+["老师","lǎoshī","giáo viên","danh từ","Trường học","HSK 1","老师好！","Lǎoshī hǎo!","Chào thầy/cô!"],
+["中国","Zhōngguó","Trung Quốc","danh từ riêng","Địa điểm","HSK 1","我去中国。","Wǒ qù Zhōngguó.","Tôi đi Trung Quốc."],
+["朋友","péngyou","bạn bè","danh từ","Gia đình & quan hệ","HSK 1","他是我的朋友。","Tā shì wǒ de péngyou.","Anh ấy là bạn tôi."]
+];
+const extraDict=[["明天","míngtiān","ngày mai"],["去","qù","đi"],["安","Ān","An (tên riêng)"],["明","Míng","Minh (tên riêng)"],["小明","Xiǎomíng","Tiểu Minh (tên riêng)"]];
+const dict={};vocab.forEach(v=>dict[v[0]]=[v[1],v[2]]);extraDict.forEach(v=>dict[v[0]]=[v[1],v[2]]);
+const sentences=[
+["我叫安。","Wǒ jiào Ān.","Tôi tên An."],["你叫什么名字？","Nǐ jiào shénme míngzi?","Bạn tên là gì?"],["很高兴认识你。","Hěn gāoxìng rènshi nǐ.","Rất vui được làm quen với bạn."],
+["你好！","Nǐ hǎo!","Xin chào!"],["你好吗？","Nǐ hǎo ma?","Bạn khỏe không?"],["我很好。","Wǒ hěn hǎo.","Tôi rất khỏe."],["我也很高兴。","Wǒ yě hěn gāoxìng.","Tôi cũng rất vui."],
+["我是学生。","Wǒ shì xuésheng.","Tôi là học sinh/sinh viên."],["我不是老师。","Wǒ bú shì lǎoshī.","Tôi không phải giáo viên."],["他是我的朋友。","Tā shì wǒ de péngyou.","Anh ấy là bạn tôi."],
+["我的名字是安。","Wǒ de míngzi shì Ān.","Tên tôi là An."],["谢谢你！","Xièxie nǐ!","Cảm ơn bạn!"],["明天再见。","Míngtiān zàijiàn.","Ngày mai gặp lại."],["我的妈妈是老师。","Wǒ de māma shì lǎoshī.","Mẹ tôi là giáo viên."]
+];
+const grammar=[
+["Câu khẳng định với 是","A + 是 + B","我是学生。Wǒ shì xuésheng. — Tôi là sinh viên.","是 nối chủ ngữ với danh từ/cụm danh từ; thường không đặt trực tiếp trước tính từ (nói 我很好, không nói 我是好)."],
+["Câu hỏi với 吗","Câu trần thuật + 吗？","你好吗？Nǐ hǎo ma? — Bạn khỏe không?","吗 đặt cuối câu để tạo câu hỏi có/không; không dùng chung với từ nghi vấn như 什么."],
+["Câu hỏi với 什么","Chủ ngữ + động từ + 什么…？","你叫什么名字？Nǐ jiào shénme míngzi? — Bạn tên gì?","Từ nghi vấn đứng đúng vị trí của thành phần được hỏi, không đảo lên đầu câu như tiếng Việt."],
+["Phủ định với 不","主语 + 不 + động từ / tính từ","我不是老师。Wǒ bú shì lǎoshī. — Tôi không phải giáo viên.","不 đọc là bú khi đứng trước âm tiết thanh 4 (như 是); trước các thanh khác vẫn đọc bù."],
+["很 + tính từ","主语 + 很 + tính từ","我很好。Wǒ hěn hǎo. — Tôi rất khỏe.","Câu tính từ thường cần 很 (hoặc phó từ khác); nghĩa “rất” của 很 trong câu đơn thường nhẹ."],
+["也 (cũng) & 的 (của)","主语 + 也 + (很) + vị ngữ · A + 的 + B","我也很高兴。· 我的名字是安。","也 đứng trước động từ/tính từ và sau chủ ngữ: 我也很高兴. 的 nối sở hữu: 我的名字 = tên của tôi."]
+];
+const quizBank=[
+{q:"Pinyin của chữ 妈 là gì?",opts:["mā","má","mǎ","mà"],a:0,why:"妈 đọc mā, thanh 1; nghĩa là mẹ."},
+{q:"Âm nào sau đây là âm BẬT HƠI?",opts:["b","p","d","g"],a:1,why:"p, t, k là các âm bật hơi; b, d, g không bật hơi."},
+{q:"你好 thường được đọc thực tế như thế nào?",opts:["nǐ hǎo (cả hai đều uốn lên)","ní hǎo","nì hǎo","nī hǎo"],a:1,why:"Hai thanh 3 liền nhau: thanh 3 đầu thường biến thành thanh 2; cách viết vẫn là nǐ hǎo."},
+{q:"你叫什么名字？ có nghĩa là gì?",opts:["Bạn khỏe không?","Bạn tên là gì?","Tôi tên An.","Cảm ơn bạn."],a:1,why:"你 (bạn) + 叫 (tên là) + 什么名字 (tên gì)."},
+{q:"Chọn câu “Tôi tên An.”",opts:["你叫安。","我叫安。","我是安吗？","再见安。"],a:1,why:"我叫安。Wǒ jiào Ān. — Tôi tên An."},
+{q:"谢谢 có nghĩa là gì?",opts:["Tạm biệt","Xin chào","Cảm ơn","Xin lỗi"],a:2,why:"谢谢 xièxie = cảm ơn."},
+{q:"Pinyin đúng của 再见 là gì?",opts:["zàijiàn","zǎijiàn","zàijiān","zāijiān"],a:0,why:"再见 zàijiàn: cả hai âm tiết đều thanh 4."},
+{q:"Câu nào có nghĩa “Bạn khỏe không?”",opts:["你好吗？","你叫什么？","我很好。","谢谢吗？"],a:0,why:"你好吗？Nǐ hǎo ma? — thêm 吗 cuối câu để tạo câu hỏi có/không."},
+{q:"Câu nào đúng với nghĩa “Tôi không phải giáo viên”?",opts:["我不是老师。","我是不老师。","我不老师是。","不我是老师。"],a:0,why:"Thứ tự: 主语 + 不 + 是 + danh từ. 不 đọc bú trước 是."},
+{q:"鱼 (cá) đọc là gì?",opts:["yú","yǔ","yū","yù"],a:0,why:"鱼 yú, thanh 2; ü được viết thành u sau y."},
+{q:"Cặp nào KHÔNG cùng là cặp “không bật hơi / bật hơi”?",opts:["b / p","d / t","g / k","m / n"],a:3,why:"m và n là âm mũi; b/p, d/t, g/k mới là các cặp không bật hơi / bật hơi."},
+{q:"我也很高兴。 có nghĩa là gì?",opts:["Tôi rất vui.","Tôi cũng rất vui.","Bạn cũng rất vui.","Tôi không vui."],a:1,why:"也 = cũng; 很 = rất; 高兴 = vui."}
+];
+
+/* ===== TRẠNG THÁI ===== */
+const KEY="claState_v2";
+function loadState(){try{return JSON.parse(localStorage.getItem(KEY)||localStorage.getItem("claState")||"{}")||{}}catch(e){return{}}}
+let state=loadState();
+["completed","known","favorites","sessions","quiz"].forEach(k=>{if(!Array.isArray(state[k]))state[k]=[]});
+["tasks","plan"].forEach(k=>{if(!state[k]||typeof state[k]!=="object")state[k]={}});
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
+let toastT=null;
+function toast(s){const t=$("toast");t.textContent=s;t.style.display="block";clearTimeout(toastT);toastT=setTimeout(()=>t.style.display="none",2600)}
+const minsOn=d=>state.sessions.filter(s=>s.date===d).reduce((a,s)=>a+s.minutes,0);
+function streak(){const days=new Set(state.sessions.map(s=>s.date));let d=new Date();if(!days.has(ymd(d)))d.setDate(d.getDate()-1);let n=0;while(days.has(ymd(d))){n++;d.setDate(d.getDate()-1)}return n}
+function setKnown(id,v){state.known=state.known.filter(x=>x!==id);if(v)state.known.push(id);save()}
+
+/* ===== ĐIỀU HƯỚNG (hash) ===== */
+const NAMES={dashboard:"Chào bạn, bắt đầu học nhé 👋",roadmap:"Lộ trình học tập",lessons:"Thư viện bài học",lessonDetail:"Bài học",vocabulary:"Kho từ vựng",flashcards:"Flashcards",grammar:"Ngữ pháp",pronunciation:"Nghe & phát âm",quiz:"Quiz & kiểm tra",planner:"Daily Study Planner",tutor:"Trợ lý học tập"};
+function show(h){
+  let page=h,m=/^lesson-(\d+)$/.exec(h);
+  if(m)page="lessonDetail";
+  if(!NAMES[page])page="dashboard";
+  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+  $(page).classList.add("active");
+  const navKey=page==="lessonDetail"?"lessons":page;
+  document.querySelectorAll(".nav").forEach(x=>x.classList.toggle("active",x.dataset.page===navKey));
+  $("pageTitle").textContent=NAMES[page];
+  if(page==="dashboard")renderDashboard();
+  if(page==="roadmap")renderRoadmap();
+  if(page==="lessons")renderLessons();
+  if(page==="lessonDetail")renderLesson(m?+m[1]:0);
+  if(page==="vocabulary")renderVocabulary();
+  if(page==="flashcards")buildDeck();
+  if(page==="grammar")renderGrammar();
+  if(page==="quiz")renderQuiz();
+  if(page==="planner")renderPlanner();
+  window.scrollTo(0,0);
+}
+window.addEventListener("hashchange",()=>show(location.hash.slice(1)||"dashboard"));
+
+/* ===== DASHBOARD ===== */
+function nextLessonIdx(){const i=lessons.findIndex((_,k)=>!state.completed.includes(k));return i<0?0:i}
+function renderDashboard(){
+  $("lessonCount").textContent=state.completed.length+"/"+lessons.length;
+  $("knownCount").textContent=state.known.length+"/"+vocab.length;
+  $("totalTime").textContent=state.sessions.reduce((a,s)=>a+s.minutes,0)+" phút";
+  const st=streak();$("streak").textContent=st+" ngày";$("streakSub").textContent=st?"Giữ vững nhé!":"Bắt đầu tạo streak!";
+  const ni=nextLessonIdx(),allDone=state.completed.length>=lessons.length;
+  $("continueBtn").href="#lesson-"+ni;
+  $("continueBtn").textContent=allDone?"↻ Ôn lại bài 1 →":"▶ Tiếp tục: Bài "+(ni+1)+" →";
+  const names=["CN","T2","T3","T4","T5","T6","T7"],arr=[];
+  for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);arr.push({label:names[d.getDay()],min:minsOn(ymd(d)),cur:i===0})}
+  $("weeklyChart").innerHTML=arr.map(x=>`<div class="barwrap" title="${x.label}: ${x.min} phút"><div class="bar ${x.cur?'current':''}" style="height:${Math.max(5,Math.min(100,x.min/120*100))}%"></div><div class="barlabel">${x.label}</div></div>`).join("");
+  const tasks=[["Ôn 5 flashcards",15,"🗂"],["Học / ôn một bài Foundation",30,"📘"],["Làm quiz nhanh",10,"✓"]];
+  const td=state.tasks[today()]||[];
+  $("todayTasks").innerHTML=tasks.map((t,i)=>`<div class="task"><div class="task-icon">${t[2]}</div><div class="task-info"><b>${t[0]}</b><small>${t[1]} phút</small></div><input class="check" type="checkbox" data-task="${i}" aria-label="${t[0]}" ${td[i]?"checked":""}></div>`).join("");
+  const n=td.filter(Boolean).length;$("todayProgress").textContent=n+"/3";$("taskProgress").style.width=n/3*100+"%";
+  $("dashboardLevels").innerHTML=[["Foundation"],["HSK 1"],["HSK 2"],["HSK 3"],["HSK 4"],["HSK 5"]].map((x,i)=>`<div class="level ${i>0?'lock':''}"><h4>${x[0]} ${i>0?'🔒':''}</h4><p>${i===0?state.completed.length+'/'+lessons.length+' bài hoàn thành':'Chưa có bài học — sắp ra mắt'}</p><div class="progress"><span style="width:${i===0?state.completed.length/lessons.length*100:0}%"></span></div></div>`).join("");
+}
+$("todayTasks").addEventListener("change",e=>{const i=e.target.dataset.task;if(i===undefined)return;const k=today();state.tasks[k]=state.tasks[k]||[false,false,false];state.tasks[k][+i]=e.target.checked;save();renderDashboard()});
+$("resetBtn").addEventListener("click",()=>{if(confirm("Xóa toàn bộ tiến độ (bài học, từ đã thuộc, thời gian, kết quả quiz)? Không thể hoàn tác.")){try{localStorage.removeItem(KEY);localStorage.removeItem("claState")}catch(e){}state={completed:[],known:[],favorites:[],sessions:[],quiz:[],tasks:{},plan:{}};renderDashboard();toast("Đã xóa tiến độ")}});
+
+/* ===== ROADMAP ===== */
+function renderRoadmap(){
+  const stages=[["Foundation","Nền tảng Pinyin, thanh điệu, phát âm và giao tiếp đầu tiên",5,"Học 5 bài Foundation + quiz"],["HSK 1","Giao tiếp cơ bản, từ vựng và mẫu câu sơ cấp",150,"Hoàn thành bài học, từ vựng và bài kiểm tra cấp độ"],["HSK 2","Mở rộng giao tiếp đời sống, câu dài hơn",300,"Đạt tiêu chí mastery và bài thi tổng hợp"],["HSK 3","Đọc/nghe hiểu và diễn đạt độc lập hơn",600,"Hoàn thành kỹ năng và kiểm tra"],["HSK 4","Học tập, công việc và tình huống xã hội",1200,"Hoàn thành kỹ năng và kiểm tra"],["HSK 5","Văn bản dài, nghe đa dạng, diễn đạt linh hoạt",2500,"Hoàn thành đánh giá tổng hợp"]];
+  $("roadmapList").innerHTML=stages.map((s,i)=>`<div class="task"><div class="lesson-num">${i+1}</div><div class="task-info"><b>${s[0]}</b><small>${s[1]}<br>Mục tiêu từ vựng tham khảo: ${s[2]} (không phải chuẩn số từ kỳ thi chính thức)</small><div class="muted" style="margin-top:6px">Điều kiện: ${s[3]}</div></div><span class="tag">${i===0?state.completed.length+"/5":"🔒 Sắp có"}</span></div>`).join("")+"<p class='muted'>Lộ trình HSK được thiết kế linh hoạt; cấu trúc và chuẩn từ vựng có thể thay đổi theo phiên bản kỳ thi.</p>";
+}
+
+/* ===== BÀI HỌC ===== */
+function renderLessons(){
+  $("lessonList").innerHTML=lessons.map((l,i)=>`<div class="card lesson-card"><div class="lesson-num">${String(i+1).padStart(2,"0")}</div><div><h3>${esc(l.title)}</h3><p>${esc(l.goal)}</p><span class="tag">${l.time} phút</span>${state.completed.includes(i)?'<span class="tag">✓ Hoàn thành</span>':''}<div style="margin-top:12px"><a class="btn small" href="#lesson-${i}">${state.completed.includes(i)?"Ôn lại":"Bắt đầu học"} →</a></div></div></div>`).join("");
+}
+function renderLesson(i){
+  if(!(i>=0&&i<lessons.length)){location.hash="lessons";return}
+  const l=lessons[i],done=state.completed.includes(i);
+  $("lessonBody").innerHTML=`<span class="tag">FOUNDATION · BÀI ${i+1}</span><h2>${esc(l.title)}</h2><p class="muted">⏱ ${l.time} phút · Mục tiêu: ${esc(l.goal)}</p><button class="speakbtn" data-say="${esc(l.say)}">🔊 Nghe ví dụ của bài</button>${l.content}
+  <div class="exercise"><h3>✍️ Tự kiểm tra</h3><p>${esc(l.q)}</p><p class="muted">Nói thành tiếng hoặc viết câu trả lời vào vở, rồi mở gợi ý để đối chiếu.</p><button class="btn ghost small" data-act="ans">Xem gợi ý đáp án</button><div class="answer" id="ansBox">${esc(l.ans)}</div><button class="btn ${done?'green':''}" data-act="done">${done?"✓ Đã hoàn thành (bấm để bỏ)":"Đánh dấu hoàn thành bài"}</button></div>
+  <div class="lesson-nav">${i>0?`<a class="btn ghost small" href="#lesson-${i-1}">← Bài ${i}</a>`:"<span></span>"}${i<lessons.length-1?`<a class="btn small" href="#lesson-${i+1}">Bài ${i+2} →</a>`:`<a class="btn small" href="#quiz">Làm quiz →</a>`}</div>`;
+}
+$("lessonBody").addEventListener("click",e=>{
+  const sp=e.target.closest("[data-say]");if(sp){speak(sp.dataset.say);return}
+  const b=e.target.closest("[data-act]");if(!b)return;
+  const m=/^lesson-(\d+)$/.exec(location.hash.slice(1));if(!m)return;const i=+m[1];
+  if(b.dataset.act==="ans")$("ansBox").classList.toggle("show");
+  if(b.dataset.act==="done"){const k=state.completed.indexOf(i);if(k>=0)state.completed.splice(k,1);else{state.completed.push(i);toast("Đã lưu hoàn thành bài học!")}save();renderLesson(i)}
+});
+
+/* ===== TỪ VỰNG ===== */
+(function(){const sel=$("filterTopic");[...new Set(vocab.map(v=>v[4]))].forEach(t=>sel.add(new Option(t,t)))})();
+function renderVocabulary(){
+  const q=norm($("searchWord").value||""),lv=$("filterLevel").value,tp=$("filterTopic").value,st=$("filterStatus").value;
+  const rows=vocab.filter(v=>(!q||norm(v.join(" ")).includes(q))&&(!lv||v[5]===lv)&&(!tp||v[4]===tp)&&(!st||(st==="known"&&state.known.includes(v[0]))||(st==="unknown"&&!state.known.includes(v[0]))||(st==="fav"&&state.favorites.includes(v[0]))));
+  $("vocabCount").textContent=rows.length+" / "+vocab.length+" từ";
+  $("vocabRows").innerHTML=rows.map(v=>{const id=v[0],known=state.known.includes(id),fav=state.favorites.includes(id);
+    return `<tr><td><div class="wordrow"><div><div class="word">${esc(v[0])}</div><div class="py">${esc(v[1])}</div></div><button class="speakbtn" data-say="${esc(v[0])}" aria-label="Nghe ${esc(v[0])}">🔊</button></div></td><td><b>${esc(v[2])}</b> <span class="muted">· ${esc(v[3])}</span><div class="muted">${esc(v[6])} · ${esc(v[7])}<br>${esc(v[8])}</div></td><td><span class="tag">${esc(v[4])}</span><div class="muted">${esc(v[5])}</div></td><td><input type="checkbox" class="check" data-known="${esc(id)}" aria-label="Đã thuộc ${esc(id)}" ${known?"checked":""}></td><td><button class="star ${fav?'on':''}" data-fav="${esc(id)}" aria-label="Yêu thích ${esc(id)}">★</button></td></tr>`}).join("")||'<tr><td colspan="5" class="empty">Không tìm thấy từ phù hợp.</td></tr>';
+}
+["searchWord"].forEach(id=>$(id).addEventListener("input",renderVocabulary));
+["filterLevel","filterTopic","filterStatus"].forEach(id=>$(id).addEventListener("change",renderVocabulary));
+$("vocabRows").addEventListener("click",e=>{
+  const sp=e.target.closest("[data-say]");if(sp){speak(sp.dataset.say);return}
+  const f=e.target.closest("[data-fav]");if(f){const id=f.dataset.fav;state.favorites=state.favorites.includes(id)?state.favorites.filter(x=>x!==id):[...state.favorites,id];save();renderVocabulary()}
+});
+$("vocabRows").addEventListener("change",e=>{const id=e.target.dataset.known;if(id===undefined)return;setKnown(id,e.target.checked);renderVocabulary()});
+
+/* ===== FLASHCARDS ===== */
+const fl={deck:[],i:0,flipped:false};
+function buildDeck(){fl.deck=vocab.filter(v=>$("flashMode").value==="all"||!state.known.includes(v[0]));fl.i=0;showFlash()}
+function frontHtml(v){return `<div class="big">${esc(v[0])}</div><div class="hint">Nhấn để lật thẻ</div>`}
+function showFlash(){
+  const c=$("flashcard"),v=fl.deck[fl.i];fl.flipped=false;
+  if(!v){c.innerHTML='<div class="big">🎉</div><div class="hint">Bạn đã thuộc hết từ trong bộ này!</div>';$("flashPosition").textContent="0 / 0";return}
+  c.innerHTML=frontHtml(v);$("flashPosition").textContent=(fl.i+1)+" / "+fl.deck.length;
+}
+function flipCard(){const v=fl.deck[fl.i];if(!v)return;fl.flipped=!fl.flipped;
+  $("flashcard").innerHTML=fl.flipped?`<div class="py" style="font-size:22px">${esc(v[1])}</div><div style="font-size:26px;font-weight:800;margin:8px 0">${esc(v[2])}</div><div class="muted">${esc(v[6])} · ${esc(v[7])}<br>${esc(v[8])}</div>`:frontHtml(v)}
+function stepCard(d){if(!fl.deck.length)return;fl.i=(fl.i+d+fl.deck.length)%fl.deck.length;showFlash()}
+function markCard(k){const v=fl.deck[fl.i];if(!v)return;setKnown(v[0],k);
+  if(k){if($("flashMode").value==="unknown")fl.deck.splice(fl.i,1);else fl.i++}
+  else fl.deck.push(fl.deck.splice(fl.i,1)[0]);
+  if(fl.i>=fl.deck.length)fl.i=0;showFlash();toast(k?"Đã ghi nhận: đã nhớ":"Thẻ được đưa xuống cuối để ôn lại")}
+$("flashcard").addEventListener("click",flipCard);
+$("flashFlip").addEventListener("click",flipCard);$("flashPrev").addEventListener("click",()=>stepCard(-1));$("flashNext").addEventListener("click",()=>stepCard(1));
+$("flashYes").addEventListener("click",()=>markCard(true));$("flashNo").addEventListener("click",()=>markCard(false));
+$("flashMode").addEventListener("change",buildDeck);
+$("flashShuffle").addEventListener("click",()=>{for(let i=fl.deck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[fl.deck[i],fl.deck[j]]=[fl.deck[j],fl.deck[i]]}fl.i=0;showFlash()});
+$("flashSpeak").addEventListener("click",()=>{const v=fl.deck[fl.i];if(v)speak(v[0])});
+document.addEventListener("keydown",e=>{
+  if(!$("flashcards").classList.contains("active")||/INPUT|SELECT|TEXTAREA/.test(e.target.tagName))return;
+  if(e.key===" "||e.key==="Enter"){if(e.target.tagName!=="BUTTON"){e.preventDefault();flipCard()}}
+  else if(e.key==="ArrowRight")stepCard(1);else if(e.key==="ArrowLeft")stepCard(-1);
+});
+
+/* ===== NGỮ PHÁP ===== */
+function renderGrammar(){$("grammarCards").innerHTML=grammar.map(g=>`<div class="card"><span class="tag">FOUNDATION</span><h3>${esc(g[0])}</h3><div class="example"><b>${esc(g[1])}</b><p>${esc(g[2])}</p></div><p class="muted">⚠ ${esc(g[3])}</p></div>`).join("")}
+
+/* ===== PHÁT ÂM ===== */
+let zhVoice=null;
+function pickVoice(){if(!("speechSynthesis"in window))return;const vs=speechSynthesis.getVoices();zhVoice=vs.find(v=>/^zh[-_]CN/i.test(v.lang))||vs.find(v=>v.lang.toLowerCase().startsWith("zh"))||null}
+if("speechSynthesis"in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
+function speak(text){
+  if(!("speechSynthesis"in window)){toast("Trình duyệt chưa hỗ trợ Web Speech API");return}
+  if(!String(text).trim()){toast("Hãy nhập nội dung cần đọc");return}
+  speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="zh-CN";u.rate=.82;if(zhVoice)u.voice=zhVoice;
+  else toast("Thiết bị chưa có giọng tiếng Trung — âm đọc có thể không chuẩn.");
+  speechSynthesis.speak(u);
+}
+$("speakBtn").addEventListener("click",()=>speak($("speakText").value));
+$("stopBtn").addEventListener("click",()=>{if("speechSynthesis"in window)speechSynthesis.cancel()});
+const asp=[["八","bā"],["趴","pā"],["搭","dā"],["他","tā"],["嘎","gā"],["咖","kā"]],tones=[["妈","mā"],["麻","má"],["马","mǎ"],["骂","mà"]];
+const drill=a=>a.map(x=>`<button data-say="${x[0]}"><b>${x[0]}</b>${x[1]}</button>`).join("");
+$("aspDrill").innerHTML=drill(asp);$("toneDrill").innerHTML=drill(tones);
+$("pronunciation").addEventListener("click",e=>{const b=e.target.closest(".drill [data-say]");if(b)speak(b.dataset.say)});
+let rec=null,recChunks=[],recStream=null,recUrl=null;
+$("recBtn").addEventListener("click",async()=>{
+  if(rec&&rec.state==="recording"){rec.stop();return}
+  if(!navigator.mediaDevices||!window.MediaRecorder){toast("Trình duyệt không hỗ trợ ghi âm");return}
+  try{
+    recStream=await navigator.mediaDevices.getUserMedia({audio:true});rec=new MediaRecorder(recStream);recChunks=[];
+    rec.ondataavailable=e=>recChunks.push(e.data);
+    rec.onstop=()=>{recStream.getTracks().forEach(t=>t.stop());if(recUrl)URL.revokeObjectURL(recUrl);recUrl=URL.createObjectURL(new Blob(recChunks,{type:rec.mimeType||"audio/webm"}));const p=$("recPlayer");p.src=recUrl;p.style.display="block";$("recBtn").textContent="🎙 Ghi âm lại"};
+    rec.start();$("recBtn").textContent="⏹ Dừng ghi";
+  }catch(err){toast(err&&err.name==="NotAllowedError"?"Bạn chưa cấp quyền micro":"Không truy cập được micro")}
+});
+
+/* ===== QUIZ ===== */
+let curQuiz=[],quizDone=false;
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function newQuiz(){
+  curQuiz=shuffle(quizBank).slice(0,5).map(q=>{const o=shuffle(q.opts.map((t,i)=>({t,ok:i===q.a})));return{q:q.q,why:q.why,opts:o}});
+  quizDone=false;$("quizSubmit").disabled=false;$("quizResult").innerHTML="";
+  $("quizQuestions").innerHTML=curQuiz.map((q,i)=>`<div style="padding:15px 0;border-bottom:1px solid var(--line)"><b>${i+1}. ${esc(q.q)}</b><div class="options">${q.opts.map((o,j)=>`<label class="option"><input type="radio" name="q${i}" value="${j}"> ${esc(o.t)}</label>`).join("")}</div></div>`).join("");
+}
+function renderQuiz(){if(!curQuiz.length||quizDone)newQuiz();renderHistory()}
+function renderHistory(){$("quizHistory").innerHTML=state.quiz.length?state.quiz.slice(-10).reverse().map(x=>`${esc(x.date)}: <b>${x.score}/${x.total||5}</b>`).join("<br>"):"Chưa có bài kiểm tra."}
+function submitQuiz(){
+  if(quizDone)return;
+  const unanswered=curQuiz.filter((_,i)=>!document.querySelector(`input[name=q${i}]:checked`)).length;
+  if(unanswered&&!confirm(`Bạn còn ${unanswered} câu chưa trả lời. Vẫn nộp bài?`))return;
+  let score=0;const detail=[];
+  curQuiz.forEach((q,i)=>{
+    const el=document.querySelector(`input[name=q${i}]:checked`),ans=el?+el.value:-1,ok=ans>=0&&q.opts[ans].ok;if(ok)score++;
+    const labels=document.querySelectorAll(`input[name=q${i}]`);
+    labels.forEach((inp,j)=>{inp.disabled=true;const lb=inp.closest(".option");if(q.opts[j].ok)lb.classList.add("correct");else if(j===ans)lb.classList.add("wrong")});
+    detail.push(`<p><b>${i+1}. ${ok?'✓ Đúng':(ans<0?'– Chưa trả lời':'✗ Sai')}</b> · Đáp án: ${esc(q.opts.find(o=>o.ok).t)}<br><span class="muted">${esc(q.why)}</span></p>`);
+  });
+  quizDone=true;$("quizSubmit").disabled=true;
+  state.quiz.push({date:today(),score,total:curQuiz.length});save();
+  $("quizResult").innerHTML=`<div class="exercise"><h2>Kết quả: ${score}/${curQuiz.length} (${Math.round(score/curQuiz.length*100)}%)</h2>${detail.join("")}</div>`;
+  renderHistory();toast("Đã lưu kết quả kiểm tra");
+}
+$("quizSubmit").addEventListener("click",submitQuiz);$("quizNew").addEventListener("click",()=>{newQuiz();window.scrollTo(0,0)});
+
+/* ===== PLANNER ===== */
+const plan=[["Ôn từ vựng",15],["Bài học mới",30],["Từ vựng & chữ Hán",20],["Ngữ pháp & đặt câu",20],["Nghe & nói",25],["Kiểm tra nhanh",10]];
+function renderPlanner(){
+  const pd=state.plan[today()]||{};
+  $("studyPlan").innerHTML=plan.map((p,i)=>`<label class="task" style="cursor:pointer"><div class="task-info"><b>${esc(p[0])}</b><small>${p[1]} phút</small></div><input class="check" type="checkbox" data-plan="${i}" ${pd[i]?"checked":""}></label>`).join("");
+  const m=minsOn(today());$("dailyProgress").style.width=Math.min(100,m/120*100)+"%";$("dailyText").textContent=m+" / 120 phút hôm nay";
+  $("studyHistory").innerHTML=state.sessions.slice(-8).reverse().map(s=>`${esc(s.date)} · ${s.minutes} phút · ${esc(s.label)}`).join("<br>")||"Chưa có phiên học.";
+}
+$("studyPlan").addEventListener("change",e=>{
+  const i=e.target.dataset.plan;if(i===undefined)return;const k=today();state.plan[k]=state.plan[k]||{};
+  if(e.target.checked){state.plan[k][i]=true;state.sessions.push({date:k,minutes:plan[i][1],label:plan[i][0],plan:+i})}
+  else{delete state.plan[k][i];state.sessions=state.sessions.filter(s=>!(s.date===k&&s.plan===+i))}
+  save();renderPlanner();toast(e.target.checked?"Đã cộng "+plan[i][1]+" phút":"Đã trừ "+plan[i][1]+" phút");
+});
+const T={dur:1500,left:1500,endAt:null,iv:null};
+const fmt=s=>String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
+function showTimer(){$("timerDisplay").textContent=fmt(T.left);document.title=T.iv?fmt(T.left)+" · Chinese Academy":"Chinese Learning Academy"}
+function syncLeft(){if(T.endAt)T.left=Math.max(0,Math.round((T.endAt-Date.now())/1000))}
+function tick(){syncLeft();showTimer();if(T.left<=0){clearInterval(T.iv);T.iv=null;T.endAt=null;addSession(Math.round(T.dur/60));toast("Hoàn thành! Đã tự ghi nhận "+Math.round(T.dur/60)+" phút.");T.left=T.dur;showTimer();$("timerStatus").textContent="Hoàn thành · sẵn sàng phiên mới"}}
+function addSession(mins){state.sessions.push({date:today(),minutes:mins,label:"Pomodoro / học tập"});save();renderPlanner();renderDashboard()}
+function startTimer(){if(T.iv)return;if(T.left<=0)T.left=T.dur;T.endAt=Date.now()+T.left*1000;T.iv=setInterval(tick,500);$("timerStatus").textContent="Đang tập trung · "+Math.round(T.dur/60)+" phút";showTimer()}
+function pauseTimer(){if(!T.iv)return;syncLeft();clearInterval(T.iv);T.iv=null;T.endAt=null;$("timerStatus").textContent="Đã tạm dừng";showTimer()}
+function resetTimer(){if(T.iv){clearInterval(T.iv);T.iv=null;T.endAt=null}T.left=T.dur;showTimer();$("timerStatus").textContent="Pomodoro · "+Math.round(T.dur/60)+" phút"}
+function recordTime(){
+  if(T.iv){syncLeft()}const mins=Math.floor((T.dur-T.left)/60);
+  if(mins<1){toast("Chưa đủ 1 phút học để ghi nhận.");return}
+  if(T.iv){clearInterval(T.iv);T.iv=null;T.endAt=null}
+  addSession(mins);resetTimer();toast("Đã ghi nhận "+mins+" phút học");
+}
+$("timerStart").addEventListener("click",startTimer);$("timerPause").addEventListener("click",pauseTimer);$("timerReset").addEventListener("click",resetTimer);$("timerRecord").addEventListener("click",recordTime);
+$("timerDur").addEventListener("change",e=>{if(T.iv){toast("Hãy tạm dừng hoặc đặt lại trước khi đổi thời lượng");e.target.value=String(Math.round(T.dur/60));return}T.dur=+e.target.value*60;resetTimer()});
+
+/* ===== TRỢ LÝ OFFLINE ===== */
+function segment(text){
+  const keys=Object.keys(dict),maxL=Math.max(...keys.map(k=>k.length)),out=[];let i=0;
+  while(i<text.length){
+    const ch=text[i];
+    if(!/[\u4e00-\u9fff]/.test(ch)){i++;continue}
+    let found=null;
+    for(let L=Math.min(maxL,text.length-i);L>=1;L--){const w=text.substr(i,L);if(dict[w]){found=w;break}}
+    if(found){out.push({w:found,py:dict[found][0],vi:dict[found][1]});i+=found.length}
+    else{out.push({w:ch,unk:true});i++}
+  }
+  return out;
+}
+const tokHtml=t=>t.map(x=>x.unk?`<span class="tok unk"><div class="cn" style="font-size:20px">${esc(x.w)}</div><div class="muted">chưa có trong kho</div></span>`:`<span class="tok"><div class="cn" style="font-size:20px">${esc(x.w)}</div><div class="py">${esc(x.py)}</div><div class="muted">${esc(x.vi)}</div></span>`).join("");
+const hints=[["吗","Có 吗 ở cuối → câu hỏi có/không."],["什么","Có 什么 → câu hỏi “cái gì”, đặt ở vị trí thành phần được hỏi."],["不","Có 不 → phủ định; đọc bú nếu theo sau là âm tiết thanh 4 (như 是)."],["是","Có 是 → câu “A là B” (B là danh từ)."],["很","Có 很 → thường đi trước tính từ (我很好)."],["也","Có 也 → “cũng”, đứng sau chủ ngữ, trước vị ngữ."],["的","Có 的 → sở hữu: A 的 B = B của A."],["你好","你好: hai thanh 3 liền nhau nên đọc thực tế là ní hǎo."]];
+let practiceCur=null;
+function tutorAction(){
+  const mode=$("tutorMode").value,x=$("tutorInput").value.trim(),out=$("tutorOutput");
+  if(mode==="practice"){
+    practiceCur=sentences[Math.floor(Math.random()*sentences.length)];
+    out.innerHTML=`<b>Dịch sang tiếng Trung:</b> “${esc(practiceCur[2])}”<div class="toolbar"><input class="field" id="pracInput" lang="zh-CN" placeholder="Nhập câu tiếng Trung..." style="flex:1"><button class="btn small" id="pracCheck">Kiểm tra</button><button class="btn ghost small" id="pracShow">Xem đáp án</button></div><div id="pracMsg"></div>`;
+    const chk=()=>{const v=stripP($("pracInput").value);if(!v){$("pracMsg").textContent="Hãy nhập câu trả lời.";return}
+      $("pracMsg").innerHTML=v===stripP(practiceCur[0])?"✅ Chính xác! <span class='py'>"+esc(practiceCur[1])+"</span>":"❌ Chưa đúng, thử lại hoặc bấm “Xem đáp án”."};
+    $("pracCheck").onclick=chk;$("pracInput").onkeydown=e=>{if(e.key==="Enter")chk()};
+    $("pracShow").onclick=()=>{$("pracMsg").innerHTML=`Đáp án: <b class="cn" style="font-size:20px">${esc(practiceCur[0])}</b> <span class="py">${esc(practiceCur[1])}</span>`};
+    return;
+  }
+  if(!x){out.textContent="Hãy nhập nội dung trước.";return}
+  if(!/[\u4e00-\u9fff]/.test(x)){out.textContent="Hãy nhập chữ Hán (ví dụ: 你好吗). Chế độ này chưa đọc được pinyin hoặc tiếng Việt.";return}
+  const toks=segment(x),hit=sentences.find(s=>stripP(s[0])===stripP(x)),unk=toks.filter(t=>t.unk).length;
+  if(mode==="translate"){
+    if(hit){out.innerHTML=`<b>${esc(hit[0])}</b><div class="py">${esc(hit[1])}</div><div>${esc(hit[2])}</div>`;return}
+    out.innerHTML=`<b>Dịch từng từ (không phải bản dịch hoàn chỉnh):</b><div>${tokHtml(toks)}</div>${unk?`<p class="muted">Có ${unk} chữ chưa có trong kho từ vựng.</p>`:""}`;return;
+  }
+  const hs=hints.filter(h=>x.includes(h[0])).map(h=>`<li>${esc(h[1])}</li>`).join("");
+  out.innerHTML=`<b>Phân tích:</b><div>${tokHtml(toks)}</div>${hit?`<p><span class="py">${esc(hit[1])}</span><br>${esc(hit[2])}</p>`:""}${hs?`<b>Ghi chú ngữ pháp</b><ul>${hs}</ul>`:""}${unk?`<p class="muted">Có ${unk} chữ chưa có trong kho từ vựng nên chưa phân tích được.</p>`:""}`;
+}
+$("tutorGo").addEventListener("click",tutorAction);
+$("tutorInput").addEventListener("keydown",e=>{if(e.key==="Enter")tutorAction()});
+$("tutorMode").addEventListener("change",()=>{$("tutorInput").disabled=$("tutorMode").value==="practice"});
+
+/* ===== KHỞI ĐỘNG ===== */
+showTimer();
+show(location.hash.slice(1)||"dashboard");
+</script>
+</body></html>
