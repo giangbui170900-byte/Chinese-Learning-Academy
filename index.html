@@ -161,7 +161,7 @@ a.level{display:block}.pager{display:flex;gap:10px;align-items:center;justify-co
 <div class="flash-actions"><button class="btn ghost" id="flashNo">↻ Chưa nhớ</button><button class="btn green" id="flashYes">✓ Đã nhớ</button></div>
 <p class="muted">Phím tắt: Space/Enter = lật · ← → = chuyển thẻ. “Chưa nhớ” đẩy thẻ xuống cuối bộ để ôn lại; “Đã nhớ” đánh dấu từ đó là đã thuộc trong Kho từ vựng.</p></div></section>
 
-<section class="page" id="grammar"><div class="section-head"><h3>Ngữ pháp nền tảng</h3><span class="tag">Foundation</span></div><div class="grid two" id="grammarCards"></div></section>
+<section class="page" id="grammar"><div class="section-head"><h3>Ngữ pháp</h3><span class="tag">Foundation · HSK 1–5</span></div><div class="grid two" id="grammarCards"></div></section>
 
 <section class="page" id="pronunciation"><div class="card"><h2>🎧 Nghe &amp; phát âm</h2><p class="muted">Dùng giọng đọc zh-CN có sẵn trong trình duyệt nếu thiết bị hỗ trợ. Đây là giọng tổng hợp (TTS), không phải chấm điểm phát âm.</p>
 <div class="toolbar"><input class="field" id="speakText" value="你好，我叫小明。" lang="zh-CN" style="flex:1"><button class="btn" id="speakBtn">🔊 Nghe tiếng Trung</button><button class="btn ghost" id="stopBtn">Dừng</button></div>
@@ -181,8 +181,8 @@ a.level{display:block}.pager{display:flex;gap:10px;align-items:center;justify-co
 <div class="card"><h3>Lịch học 120 phút/ngày</h3><p class="muted">Tích vào mục đã học xong để cộng thời gian vào hôm nay (bỏ tích để trừ lại).</p><div id="studyPlan"></div><div class="progress"><span id="dailyProgress" style="width:0%"></span></div><p class="muted" id="dailyText">0 / 120 phút hôm nay</p></div></div>
 <div class="card" style="margin-top:16px"><h3>Ghi nhận thời gian học</h3><div id="studyHistory" class="muted">Chưa có phiên học.</div></div></section>
 
-<section class="page" id="tutor"><div class="card"><h2>🤖 Trợ lý học tập (offline)</h2><p>Chưa kết nối AI tạo sinh. Công cụ dưới đây hoạt động offline dựa trên kho từ vựng và các câu mẫu có sẵn; nó không hiểu được câu tùy ý.</p>
-<div class="toolbar"><select class="field" id="tutorMode"><option value="explain">Phân tích câu</option><option value="translate">Dịch Trung → Việt</option><option value="practice">Bài tập Việt → Trung</option></select><input class="field" id="tutorInput" lang="zh-CN" placeholder="Nhập câu tiếng Trung, ví dụ: 你好吗" style="flex:1"><button class="btn" id="tutorGo">Thực hiện</button></div>
+<section class="page" id="tutor"><div class="card"><h2>🤖 Trợ lý học tập (offline)</h2><p>Chưa kết nối AI tạo sinh. Công cụ dưới đây hoạt động offline (phân tích câu theo 28 mẫu ngữ pháp, sửa lỗi thường gặp, từ điển, tra cứu ngữ pháp, luyện sắp xếp câu) dựa trên kho từ vựng và các câu mẫu có sẵn; nó không hiểu được câu tùy ý.</p>
+<div class="toolbar"><select class="field" id="tutorMode"><option value="explain">Phân tích câu</option><option value="translate">Dịch Trung → Việt</option><option value="practice">Bài tập Việt → Trung</option><option value="check">Kiểm tra &amp; sửa lỗi câu</option><option value="dict">Từ điển (Hán / pinyin / Việt)</option><option value="gsearch">Tra cứu ngữ pháp</option><option value="order">Luyện sắp xếp câu</option></select><input class="field" id="tutorInput" lang="zh-CN" placeholder="Nhập câu tiếng Trung, ví dụ: 你好吗" style="flex:1"><button class="btn" id="tutorGo">Thực hiện</button></div>
 <div id="tutorOutput" class="example">Ví dụ: nhập 我叫安 hoặc 你叫什么名字 rồi bấm “Thực hiện”.</div>
 <p class="muted">Muốn bật AI tạo sinh cần cấu hình backend/API key; không nên đặt API key trực tiếp trong HTML client.</p></div></section>
 </main></div><div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -229,11 +229,17 @@ const grammar=[
 ["Câu khẳng định với 是","A + 是 + B","我是学生。Wǒ shì xuésheng. — Tôi là sinh viên.","是 nối chủ ngữ với danh từ/cụm danh từ; thường không đặt trực tiếp trước tính từ (nói 我很好, không nói 我是好)."],
 ["Câu hỏi với 吗","Câu trần thuật + 吗？","你好吗？Nǐ hǎo ma? — Bạn khỏe không?","吗 đặt cuối câu để tạo câu hỏi có/không; không dùng chung với từ nghi vấn như 什么."],
 ["Câu hỏi với 什么","Chủ ngữ + động từ + 什么…？","你叫什么名字？Nǐ jiào shénme míngzi? — Bạn tên gì?","Từ nghi vấn đứng đúng vị trí của thành phần được hỏi, không đảo lên đầu câu như tiếng Việt."],
-["Phủ định với 不","主语 + 不 + động từ / tính từ","我不是老师。Wǒ bú shì lǎoshī. — Tôi không phải giáo viên.","不 đọc là bú khi đứng trước âm tiết thanh 4 (như 是); trước các thanh khác vẫn đọc bù."],
-["很 + tính từ","主语 + 很 + tính từ","我很好。Wǒ hěn hǎo. — Tôi rất khỏe.","Câu tính từ thường cần 很 (hoặc phó từ khác); nghĩa “rất” của 很 trong câu đơn thường nhẹ."],
-["也 (cũng) & 的 (của)","主语 + 也 + (很) + vị ngữ · A + 的 + B","我也很高兴。· 我的名字是安。","也 đứng trước động từ/tính từ và sau chủ ngữ: 我也很高兴. 的 nối sở hữu: 我的名字 = tên của tôi."]
+["Phủ định với 不","Chủ ngữ + 不 + động từ / tính từ","我不是老师。Wǒ bú shì lǎoshī. — Tôi không phải giáo viên.","不 đọc là bú khi đứng trước âm tiết thanh 4 (như 是); trước các thanh khác vẫn đọc bù."],
+["很 + tính từ","Chủ ngữ + 很 + tính từ","我很好。Wǒ hěn hǎo. — Tôi rất khỏe.","Câu tính từ thường cần 很 (hoặc phó từ khác); nghĩa “rất” của 很 trong câu đơn thường nhẹ."],
+["也 (cũng) & 的 (của)","Chủ ngữ + 也 + (很) + vị ngữ · A + 的 + B","我也很高兴。Wǒ yě hěn gāoxìng. — Tôi cũng rất vui. · 我的名字是安。Wǒ de míngzi shì Ān. — Tên tôi là An.","也 đứng trước động từ/tính từ và sau chủ ngữ: 我也很高兴. 的 nối sở hữu: 我的名字 = tên của tôi."]
 ];
 const quizBank=[
+{q:"不 đứng trước 是 (不是) đọc như thế nào?",opts:["bú shì","bù shì","bǔ shì","bū shì"],a:0,why:"不 đọc bú trước âm tiết thanh 4 (是 là thanh 4)."},
+{q:"一 trong 一个 đọc là gì?",opts:["yí gè","yī gè","yì gè","yǐ gè"],a:0,why:"一 đọc yí trước thanh 4; 个 là thanh 4."},
+{q:"Pinyin đúng của 女 (nữ) là gì?",opts:["nǚ","nù","nú","nǔ"],a:0,why:"女 nǚ: thanh 3, nguyên âm ü."},
+{q:"Tiếng Phổ thông có mấy thanh điệu chính (chưa kể thanh nhẹ)?",opts:["4","3","5","6"],a:0,why:"Bốn thanh: ngang (¯), lên (ˊ), gập (ˇ), xuống (ˋ); ngoài ra có thanh nhẹ."},
+{q:"Từ nào đặt cuối câu để tạo câu hỏi có/không?",opts:["吗","什么","谁","哪儿"],a:0,why:"吗 tạo câu hỏi có/không; 什么, 谁, 哪儿 là từ nghi vấn, không dùng cùng 吗."},
+{q:"Câu nào đúng ngữ pháp?",opts:["我很好。","我是好。","我是很好。","我好是。"],a:0,why:"Tính từ làm vị ngữ thường đi với 很, không dùng 是."},
 {q:"Pinyin của chữ 妈 là gì?",opts:["mā","má","mǎ","mà"],a:0,why:"妈 đọc mā, thanh 1; nghĩa là mẹ."},
 {q:"Âm nào sau đây là âm BẬT HƠI?",opts:["b","p","d","g"],a:1,why:"p, t, k là các âm bật hơi; b, d, g không bật hơi."},
 {q:"你好 thường được đọc thực tế như thế nào?",opts:["nǐ hǎo (cả hai đều uốn lên)","ní hǎo","nì hǎo","nī hǎo"],a:1,why:"Hai thanh 3 liền nhau: thanh 3 đầu thường biến thành thanh 2; cách viết vẫn là nǐ hǎo."},
@@ -340,7 +346,7 @@ content:`<h3>1. Số đếm</h3><div class="example"><p>1–10: 一 yī · 二 �
 {id:"g3",title:"Ngữ pháp HSK 1 · Các kiểu câu hỏi",time:30,goal:"Đặt câu hỏi bằng 吗, 呢, 什么, 谁, 哪, 几, 多少, 怎么.",q:"Hỏi: “Bạn đi đâu?”",ans:"你去哪儿？Nǐ qù nǎr?",
 content:`<h3>1. Hỏi có / không: 吗 (ma)</h3>${exBox([["你是学生吗？","Nǐ shì xuésheng ma?","Bạn là học sinh phải không?"]])}<h3>2. Hỏi lại: 呢 (ne)</h3>${exBox([["我很好，你呢？","Wǒ hěn hǎo, nǐ ne?","Tôi khỏe, còn bạn?"]])}<h3>3. Từ nghi vấn</h3><p>Từ nghi vấn <b>đứng đúng vị trí của thành phần cần hỏi</b>, không đảo lên đầu câu, và <b>không dùng thêm 吗</b>.</p>${exBox([["你想吃什么？","Nǐ xiǎng chī shénme?","Bạn muốn ăn gì? (什么 = gì)"],["他是谁？","Tā shì shéi?","Anh ấy là ai? (谁 = ai)"],["你去哪儿？","Nǐ qù nǎr?","Bạn đi đâu? (哪儿 / 哪里 = đâu)"],["你是哪国人？","Nǐ shì nǎ guó rén?","Bạn là người nước nào? (哪 = nào)"],["你几岁？","Nǐ jǐ suì?","Bạn mấy tuổi? (几 = mấy, số nhỏ)"],["这个多少钱？","Zhège duōshao qián?","Cái này bao nhiêu tiền? (多少 = bao nhiêu)"],["这个字怎么读？","Zhège zì zěnme dú?","Chữ này đọc thế nào? (怎么 = thế nào, bằng cách nào)"],["今天天气怎么样？","Jīntiān tiānqì zěnmeyàng?","Hôm nay thời tiết thế nào?"]])}`},
 {id:"g4",title:"Ngữ pháp HSK 1 · Giờ, ngày, tháng, thứ",time:30,goal:"Hỏi và nói giờ, ngày tháng, thứ trong tuần; biết vị trí của từ chỉ thời gian trong câu.",q:"Dịch: “Hôm nay thứ mấy?”",ans:"今天星期几？Jīntiān xīngqī jǐ?",
-content:`<h3>1. Giờ</h3>${exBox([["现在几点？","Xiànzài jǐ diǎn?","Bây giờ mấy giờ?"],["现在三点十分。","Xiànzài sān diǎn shí fēn.","Bây giờ là 3 giờ 10 phút."],["现在两点半。","Xiànzài liǎng diǎn bàn.","Bây giờ là 2 giờ rưỡi. (2 giờ dùng 两点)"]])}<h3>2. Ngày, tháng, năm</h3><p>Thứ tự từ lớn đến nhỏ: năm → tháng → ngày (號 / 日).</p>${exBox([["今天是十一月七号。","Jīntiān shì shíyī yuè qī hào.","Hôm nay là ngày 7 tháng 11."],["明天是八号。","Míngtiān shì bā hào.","Ngày mai là mùng 8."]])}<h3>3. Thứ trong tuần</h3><p>星期一 (thứ hai) … 星期六 (thứ bảy), <b>星期天 / 星期日</b> (chủ nhật).</p>${exBox([["今天星期几？","Jīntiān xīngqī jǐ?","Hôm nay thứ mấy?"],["明天是星期六。","Míngtiān shì xīngqīliù.","Ngày mai là thứ bảy."]])}<h3>4. Vị trí từ chỉ thời gian</h3><p>Từ chỉ thời gian đứng <b>trước động từ</b> (sau chủ ngữ hoặc đầu câu).</p>${exBox([["我明天去学校。","Wǒ míngtiān qù xuéxiào.","Ngày mai tôi đến trường."],["晚上我看书。","Wǎnshang wǒ kàn shū.","Buổi tối tôi đọc sách."]])}`},
+content:`<h3>1. Giờ</h3>${exBox([["现在几点？","Xiànzài jǐ diǎn?","Bây giờ mấy giờ?"],["现在三点十分。","Xiànzài sān diǎn shí fēn.","Bây giờ là 3 giờ 10 phút."],["现在两点半。","Xiànzài liǎng diǎn bàn.","Bây giờ là 2 giờ rưỡi. (2 giờ dùng 两点)"]])}<h3>2. Ngày, tháng, năm</h3><p>Thứ tự từ lớn đến nhỏ: năm → tháng → ngày (号 / 日).</p>${exBox([["今天是十一月七号。","Jīntiān shì shíyī yuè qī hào.","Hôm nay là ngày 7 tháng 11."],["明天是八号。","Míngtiān shì bā hào.","Ngày mai là mùng 8."]])}<h3>3. Thứ trong tuần</h3><p>星期一 (thứ hai) … 星期六 (thứ bảy), <b>星期天 / 星期日</b> (chủ nhật).</p>${exBox([["今天星期几？","Jīntiān xīngqī jǐ?","Hôm nay thứ mấy?"],["明天是星期六。","Míngtiān shì xīngqīliù.","Ngày mai là thứ bảy."]])}<h3>4. Vị trí từ chỉ thời gian</h3><p>Từ chỉ thời gian đứng <b>trước động từ</b> (sau chủ ngữ hoặc đầu câu).</p>${exBox([["我明天去学校。","Wǒ míngtiān qù xuéxiào.","Ngày mai tôi đến trường."],["晚上我看书。","Wǎnshang wǒ kàn shū.","Buổi tối tôi đọc sách."]])}`},
 {id:"g5",title:"Ngữ pháp HSK 1 · 了, 在 và 正在",time:35,goal:"Diễn đạt hành động đã xảy ra (了) và đang diễn ra (在 / 正在).",q:"Phủ định câu “我吃了饭” (Tôi đã ăn cơm) thành “Tôi chưa ăn cơm.”",ans:"我没吃饭。Wǒ méi chī fàn. (dùng 没, bỏ 了)",
 content:`<h3>1. 了 (le): hoàn thành / thay đổi</h3>${exBox([["我吃了早饭。","Wǒ chī le zǎofàn.","Tôi đã ăn sáng."],["我到家了。","Wǒ dào jiā le.","Tôi về đến nhà rồi."],["这个太贵了。","Zhège tài guì le.","Cái này đắt quá. (太…了 = quá…)"]])}<h3>2. Phủ định hành động đã xảy ra</h3><p>Dùng <b>没 (méi)</b> trước động từ và <b>bỏ 了</b>.</p>${exBox([["我没吃饭。","Wǒ méi chī fàn.","Tôi chưa ăn cơm."]])}<h3>3. 在 (zài): ở / đang</h3>${exBox([["我在家。","Wǒ zài jiā.","Tôi ở nhà."],["我在学校学习。","Wǒ zài xuéxiào xuéxí.","Tôi học ở trường. (在 + nơi chốn + động từ)"],["他正在看电视。","Tā zhèngzài kàn diànshì.","Anh ấy đang xem tivi. ((正)在 + động từ = đang)"],["我在写汉字。","Wǒ zài xiě Hànzì.","Tôi đang viết chữ Hán."]])}`},
 {id:"g6",title:"Ngữ pháp HSK 1 · 会, 能, 可以, 想, 要",time:35,goal:"Dùng các động từ năng nguyện để nói khả năng, mong muốn, sự cho phép.",q:"Dịch: “Tôi biết nói tiếng Trung.”",ans:"我会说汉语。Wǒ huì shuō Hànyǔ.",
@@ -350,12 +356,36 @@ content:`<h3>1. 在 / 去 / 来 + nơi chốn</h3>${exBox([["我在家。","Wǒ 
 {id:"g8",title:"Ngữ pháp HSK 1 · Tính từ, 也 / 都 và 的",time:35,goal:"Dùng 很 / 太 / 非常 với tính từ, đặt 也 và 都 đúng chỗ, dùng 的 để chỉ sở hữu.",q:"Dịch: “Chúng tôi đều rất vui.”",ans:"我们都很高兴。Wǒmen dōu hěn gāoxìng.",
 content:`<h3>1. Tính từ</h3><p>Tính từ làm vị ngữ thường đi với một phó từ như <b>很</b>, không dùng 是: 我很好, <b>không nói</b> 我是好.</p>${exBox([["我很高兴。","Wǒ hěn gāoxìng.","Tôi rất vui."],["这个太贵了。","Zhège tài guì le.","Cái này đắt quá."],["他非常高兴。","Tā fēicháng gāoxìng.","Anh ấy vô cùng vui."],["这个不大。","Zhège bú dà.","Cái này không lớn. (不 đọc bú trước thanh 4)"]])}<h3>2. 也 (cũng) và 都 (đều)</h3><p>Cả hai đứng <b>sau chủ ngữ, trước động từ / tính từ</b>. Khi dùng cùng nhau, 也 đứng trước 都.</p>${exBox([["我也是学生。","Wǒ yě shì xuésheng.","Tôi cũng là học sinh."],["我们都是学生。","Wǒmen dōu shì xuésheng.","Chúng tôi đều là học sinh."],["我们也都很好。","Wǒmen yě dōu hěn hǎo.","Chúng tôi cũng đều khỏe."]])}<h3>3. 的 (de): của</h3><p>A 的 B = B của A. Với người thân, quan hệ gần, thường bỏ 的.</p>${exBox([["这是我的书。","Zhè shì wǒ de shū.","Đây là sách của tôi."],["我妈妈是老师。","Wǒ māma shì lǎoshī.","Mẹ tôi là giáo viên. (bỏ 的)"]])}`}
 ].map(g=>({...g,kind:"g",level:"1"}));
+const X=(lv,id,t,goal,q,ans,intro,ex)=>({id,level:lv,kind:"g",title:`Ngữ pháp HSK ${lv} · ${t}`,time:25,goal,q,ans,content:`<p>${intro}</p>${exBox(ex)}<p class="muted">Lưu ý: phân cấp điểm ngữ pháp có thể lệch nhẹ giữa HSK 2.0 và 3.0.</p>`});
+GRAMMAR.push(
+X("2","g9","So sánh với 比","Nói A hơn B, và phủ định bằng 没有.","Dịch: “Anh ấy cao hơn tôi.”","他比我高。Tā bǐ wǒ gāo.","Cấu trúc: <b>A + 比 + B + tính từ</b>. Không thêm 很 trước tính từ. Phủ định: <b>A + 没有 + B + tính từ</b>.",[["他比我高。","Tā bǐ wǒ gāo.","Anh ấy cao hơn tôi."],["我没有他高。","Wǒ méiyǒu tā gāo.","Tôi không cao bằng anh ấy."]]),
+X("2","g10","Kinh nghiệm với 过","Nói đã từng làm gì.","Dịch: “Tôi chưa từng đến Bắc Kinh.”","我没去过北京。Wǒ méi qù guo Běijīng.","Cấu trúc: <b>động từ + 过</b>. Phủ định: <b>没 + động từ + 过</b>.",[["我去过北京。","Wǒ qù guo Běijīng.","Tôi đã từng đến Bắc Kinh."],["我没吃过饺子。","Wǒ méi chī guo jiǎozi.","Tôi chưa từng ăn sủi cảo."]]),
+X("2","g11","Bổ ngữ trạng thái với 得","Nhận xét hành động làm tốt hay không.","Dịch: “Cô ấy hát rất hay.”","她唱得很好。Tā chàng de hěn hǎo.","Cấu trúc: <b>động từ + 得 + (很) + tính từ</b>. Nếu có tân ngữ, lặp động từ: 动 + 宾 + 动 + 得.",[["他说得很好。","Tā shuō de hěn hǎo.","Anh ấy nói rất tốt."],["他说汉语说得很好。","Tā shuō Hànyǔ shuō de hěn hǎo.","Anh ấy nói tiếng Trung rất tốt."]]),
+X("2","g12","Sắp xảy ra: 快要…了","Nói việc sắp xảy ra.","Dịch: “Tàu sắp chạy rồi.”","火车快要开了。Huǒchē kuàiyào kāi le.","Cấu trúc: <b>(快)要 / 快 + động từ + 了</b>.",[["火车快要开了。","Huǒchē kuàiyào kāi le.","Tàu sắp chạy rồi."],["我们要放假了。","Wǒmen yào fàngjià le.","Chúng tôi sắp nghỉ rồi."]]),
+X("2","g13","Nguyên nhân – kết quả","Nối câu bằng 因为…所以…, 但是.","Dịch: “Vì trời mưa nên tôi không đi.”","因为下雨，所以我没去。","<b>因为 + nguyên nhân, 所以 + kết quả</b>. Tiếng Trung hay dùng đủ cả hai vế. <b>但是</b> nghĩa là “nhưng”.",[["因为下雨，所以我没去。","Yīnwèi xià yǔ, suǒyǐ wǒ méi qù.","Vì trời mưa nên tôi không đi."],["我很累，但是很高兴。","Wǒ hěn lèi, dànshì hěn gāoxìng.","Tôi mệt nhưng rất vui."]]),
+X("3","g14","Câu 把","Đưa tân ngữ lên trước động từ để nói xử lý vật gì.","Dịch: “Tôi để sách trên bàn.”","我把书放在桌子上。","Cấu trúc: <b>Chủ ngữ + 把 + tân ngữ + động từ + thành phần khác</b> (在…, 了, kết quả…). Động từ không đứng trơ trọi.",[["我把书放在桌子上。","Wǒ bǎ shū fàng zài zhuōzi shàng.","Tôi đặt sách lên bàn."],["请把门关上。","Qǐng bǎ mén guānshang.","Xin đóng cửa lại."]]),
+X("3","g15","Câu bị động với 被","Nói chủ thể chịu tác động.","Dịch: “Cái cốc bị anh ấy làm vỡ.”","杯子被他打破了。","Cấu trúc: <b>Vật + 被 + (người) + động từ + thành phần khác</b>.",[["杯子被他打破了。","Bēizi bèi tā dǎpò le.","Cái cốc bị anh ấy làm vỡ."],["我的手机被偷了。","Wǒ de shǒujī bèi tōu le.","Điện thoại của tôi bị trộm."]]),
+X("3","g16","Điều kiện: 如果…就…","Nói “nếu… thì…”.","Dịch: “Nếu mai mưa, tôi sẽ không đi.”","如果明天下雨，我就不去。","Cấu trúc: <b>如果 + điều kiện, 就 + kết quả</b>. 就 đứng trước động từ ở vế sau.",[["如果明天下雨，我就不去。","Rúguǒ míngtiān xià yǔ, wǒ jiù bú qù.","Nếu mai mưa thì tôi không đi."],["如果你有时间，就来吧。","Rúguǒ nǐ yǒu shíjiān, jiù lái ba.","Nếu bạn rảnh thì đến nhé."]]),
+X("3","g17","Nhượng bộ: 虽然…但是…","Nói “tuy… nhưng…”.","Dịch: “Tuy mệt nhưng rất vui.”","虽然很累，但是很高兴。","Cấu trúc: <b>虽然 + vế 1, 但是 + vế 2</b>. Tiếng Trung dùng cả hai từ cùng lúc.",[["虽然很累，但是很高兴。","Suīrán hěn lèi, dànshì hěn gāoxìng.","Tuy mệt nhưng rất vui."],["虽然很贵，但是很好吃。","Suīrán hěn guì, dànshì hěn hǎochī.","Tuy đắt nhưng rất ngon."]]),
+X("3","g18","越来越 và 越…越…","Nói mức độ ngày càng tăng.","Dịch: “Trời ngày càng lạnh.”","天气越来越冷。","<b>越来越 + tính từ</b> = ngày càng. <b>越 + A + 越 + B</b> = càng A càng B.",[["天气越来越冷。","Tiānqì yuè lái yuè lěng.","Trời ngày càng lạnh."],["他越学越有意思。","Tā yuè xué yuè yǒu yìsi.","Càng học anh ấy càng thấy thú vị."]]),
+X("4","g19","不但…而且…","Nói “không những… mà còn…”.","Dịch: “Cô ấy không những xinh mà còn thông minh.”","她不但漂亮，而且聪明。","Cấu trúc: <b>不但 + vế 1, 而且 + vế 2</b>. Nếu hai vế khác chủ ngữ, 不但 đứng trước chủ ngữ.",[["他不但会说汉语，而且会说英语。","Tā búdàn huì shuō Hànyǔ, érqiě huì shuō Yīngyǔ.","Anh ấy không những nói được tiếng Trung mà còn nói được tiếng Anh."],["她不但漂亮，而且聪明。","Tā búdàn piàoliang, érqiě cōngming.","Cô ấy không những xinh mà còn thông minh."]]),
+X("4","g20","只要…就… và 只有…才…","Phân biệt điều kiện đủ và điều kiện cần.","Điền: “__努力，__能成功” (điều kiện cần).","只有努力，才能成功。","<b>只要…就…</b>: chỉ cần (điều kiện đủ). <b>只有…才…</b>: chỉ khi (điều kiện duy nhất).",[["只要努力，就能成功。","Zhǐyào nǔlì, jiù néng chénggōng.","Chỉ cần cố gắng là sẽ thành công."],["只有努力，才能成功。","Zhǐyǒu nǔlì, cái néng chénggōng.","Chỉ có cố gắng mới thành công."]]),
+X("4","g21","连…都/也…","Nhấn mạnh “ngay cả… cũng…”.","Dịch: “Ngay cả trẻ con cũng biết.”","连小孩子都知道。","Cấu trúc: <b>连 + đối tượng nhấn mạnh + 都/也 + vị ngữ</b>.",[["连小孩子都知道。","Lián xiǎo háizi dōu zhīdào.","Ngay cả trẻ con cũng biết."],["他忙得连饭都没吃。","Tā máng de lián fàn dōu méi chī.","Anh ấy bận đến mức cơm cũng chưa ăn."]]),
+X("4","g22","即使…也…","Nói “cho dù… cũng…”.","Dịch: “Cho dù mưa tôi cũng đi.”","即使下雨，我也要去。","Cấu trúc: <b>即使 + giả thiết, 也 + kết quả</b>.",[["即使下雨，我也要去。","Jíshǐ xià yǔ, wǒ yě yào qù.","Cho dù mưa tôi cũng đi."],["即使很难，我也不放弃。","Jíshǐ hěn nán, wǒ yě bú fàngqì.","Dù khó tôi cũng không bỏ cuộc."]]),
+X("4","g23","既然…就…","Nói “đã… thì…”, dựa trên sự thật đã biết.","Dịch: “Đã mệt rồi thì nghỉ đi.”","既然你累了，就休息吧。","Cấu trúc: <b>既然 + sự thật đã rõ, 就 + đề nghị/kết luận</b>.",[["既然你累了，就休息吧。","Jìrán nǐ lèi le, jiù xiūxi ba.","Đã mệt rồi thì nghỉ đi."],["既然来了，就多住几天。","Jìrán lái le, jiù duō zhù jǐ tiān.","Đã đến rồi thì ở thêm vài ngày."]]),
+X("5","g24","无论…都…","Nói “bất kể… đều…”.","Dịch: “Dù bận đến mấy anh ấy cũng tập thể dục.”","无论多忙，他都坚持锻炼。","Cấu trúc: <b>无论 + từ nghi vấn / A 还是 B, 都 + kết quả</b>.",[["无论多忙，他都坚持锻炼。","Wúlùn duō máng, tā dōu jiānchí duànliàn.","Bận đến mấy anh ấy cũng kiên trì tập."],["无论谁来，我都欢迎。","Wúlùn shéi lái, wǒ dōu huānyíng.","Ai đến tôi cũng chào đón."]]),
+X("5","g25","尽管…但是/还是…","Nói “mặc dù… vẫn…”.","Dịch: “Mặc dù mệt, anh ấy vẫn hoàn thành công việc.”","尽管很累，他还是完成了工作。","Cấu trúc: <b>尽管 + sự thật, 但是 / 可是 / 还是 / 却 + vế sau</b>.",[["尽管很累，他还是完成了工作。","Jǐnguǎn hěn lèi, tā háishi wánchéngle gōngzuò.","Mặc dù mệt, anh ấy vẫn hoàn thành công việc."],["尽管下雨，比赛却照常进行。","Jǐnguǎn xià yǔ, bǐsài què zhàocháng jìnxíng.","Dù mưa, trận đấu vẫn diễn ra bình thường."]]),
+X("5","g26","与其…不如…","Nói “thà… còn hơn…”, chọn vế sau.","Dịch: “Thay vì chờ, thà hành động.”","与其等待，不如行动。","Cấu trúc: <b>与其 + phương án bị bỏ, 不如 + phương án được chọn</b>.",[["与其等待，不如行动。","Yǔqí děngdài, bùrú xíngdòng.","Thay vì chờ, thà hành động."],["与其坐车，不如走路。","Yǔqí zuò chē, bùrú zǒulù.","Thay vì đi xe, đi bộ còn hơn."]]),
+X("5","g27","之所以…是因为…","Nhấn mạnh kết quả trước, nguyên nhân sau.","Dịch: “Anh ấy thành công là vì luôn cố gắng.”","他之所以成功，是因为一直努力。","Cấu trúc: <b>之所以 + kết quả, 是因为 + nguyên nhân</b>.",[["他之所以成功，是因为一直努力。","Tā zhī suǒyǐ chénggōng, shì yīnwèi yìzhí nǔlì.","Anh ấy thành công là vì luôn cố gắng."],["我之所以来，是因为想见你。","Wǒ zhī suǒyǐ lái, shì yīnwèi xiǎng jiàn nǐ.","Sở dĩ tôi đến là vì muốn gặp bạn."]]),
+X("5","g28","不是…而是…","Phủ định vế này, khẳng định vế kia.","Dịch: “Anh ấy không phải không biết mà là không muốn làm.”","他不是不会，而是不想做。","Cấu trúc: <b>不是 + A, 而是 + B</b>.",[["他不是不会，而是不想做。","Tā bú shì bú huì, ér shì bù xiǎng zuò.","Anh ấy không phải không biết mà là không muốn làm."],["这不是问题，而是机会。","Zhè bú shì wèntí, ér shì jīhuì.","Đây không phải vấn đề mà là cơ hội."]])
+);
+
 const LESSON_SIZE=20;
 function vocabLessons(L){const pool=poolFor(L),out=[];for(let k=0;k*LESSON_SIZE<pool.length;k++){const w=pool.slice(k*LESSON_SIZE,(k+1)*LESSON_SIZE);out.push({id:`v-${STD()}-${L}-${k}`,kind:"v",level:L,words:w,title:`Từ vựng ${levelLabel(L)} · Bài ${k+1}`,time:20,goal:`${w.length} từ: ${w.slice(0,6).map(v=>v[0]).join(" ")}…`})}return out}
 function lessonsOf(L){
   if(L==="F")return lessons.map((l,i)=>({id:String(i),kind:"f",level:"F",title:l.title,goal:l.goal,time:l.time}));
-  const v=vocabLessons(L);if(L!=="1")return v;
-  const out=[],n=Math.max(v.length,GRAMMAR.length);for(let i=0;i<n;i++){if(v[i])out.push(v[i]);if(GRAMMAR[i])out.push(GRAMMAR[i])}return out;
+  const v=vocabLessons(L),G=GRAMMAR.filter(g=>g.level===L);if(!G.length)return v;
+  const out=[],n=Math.max(v.length,G.length);for(let i=0;i<n;i++){if(v[i])out.push(v[i]);if(G[i])out.push(G[i])}return out;
 }
 const lessonSeq=()=>LEVELS.flatMap(lessonsOf);
 const isDone=id=>state.completed.includes(/^\d+$/.test(id)?+id:id);
@@ -495,7 +525,7 @@ document.addEventListener("keydown",e=>{
 });
 
 /* ===== NGỮ PHÁP ===== */
-function renderGrammar(){$("grammarCards").innerHTML=grammar.map(g=>`<div class="card"><span class="tag">FOUNDATION</span><h3>${esc(g[0])}</h3><div class="example"><b>${esc(g[1])}</b><p>${esc(g[2])}</p></div><p class="muted">⚠ ${esc(g[3])}</p></div>`).join("")}
+function renderGrammar(){const f=grammar.map(g=>`<div class="card"><span class="tag">FOUNDATION</span><h3>${esc(g[0])}</h3><div class="example"><b>${esc(g[1])}</b><p>${esc(g[2])}</p></div><p class="muted">⚠ ${esc(g[3])}</p></div>`).join("");const h=GRAMMAR.map(g=>`<div class="card"><span class="tag">HSK ${g.level}</span><h3>${esc(g.title.replace(/^Ngữ pháp HSK \d · /,""))}</h3><p class="muted">${esc(g.goal)}</p><a class="btn small" href="#lesson-${g.id}">Xem bài →</a></div>`).join("");$("grammarCards").innerHTML=f+h}
 
 /* ===== PHÁT ÂM ===== */
 let zhVoice=null;
@@ -547,11 +577,11 @@ function vocabQuestions(level,n){
   return out;
 }
 function newQuiz(){
-  const src=$("quizSource").value;$("quizLevel").style.display=$("quizNum").style.display=src==="vocab"?"":"none";
-  if(src==="vocab"){curQuiz=vocabQuestions($("quizLevel").value,+$("quizNum").value);quizLabel="Từ vựng "+levelLabel($("quizLevel").value)}
-  else{curQuiz=shuffle(quizBank).slice(0,5).map(q=>({q:q.q,why:q.why,opts:shuffle(q.opts.map((t,i)=>({t,ok:i===q.a})))}));quizLabel="Foundation"}
+  const src=$("quizSource").value;$("quizLevel").style.display=["vocab","listen","tone","gram"].includes(src)?"":"none";$("quizNum").style.display=["vocab","listen","tone"].includes(src)?"":"none";
+  if(src!=="vocab"&&src!=="found"){curQuiz=extraQ(src,$("quizLevel").value,+$("quizNum").value);quizLabel=({listen:"Nghe hiểu",tone:"Nghe – pinyin",gram:"Ngữ pháp"})[src]+" "+levelLabel($("quizLevel").value)}else if(src==="vocab"){curQuiz=vocabQuestions($("quizLevel").value,+$("quizNum").value);quizLabel="Từ vựng "+levelLabel($("quizLevel").value)}
+  else{curQuiz=shuffle(quizBank).slice(0,10).map(q=>({q:q.q,why:q.why,opts:shuffle(q.opts.map((t,i)=>({t,ok:i===q.a})))}));quizLabel="Foundation"}
   quizDone=false;$("quizSubmit").disabled=!curQuiz.length;$("quizResult").innerHTML="";$("quizTag").textContent=curQuiz.length+" câu";$("quizTitle").textContent="Kiểm tra nhanh · "+quizLabel;
-  $("quizQuestions").innerHTML=curQuiz.length?curQuiz.map((q,i)=>`<div style="padding:15px 0;border-bottom:1px solid var(--line)"><b>${i+1}. ${esc(q.q)}</b><div class="options">${q.opts.map((o,j)=>`<label class="option"><input type="radio" name="q${i}" value="${j}"> ${esc(o.t)}</label>`).join("")}</div></div>`).join(""):'<p class="muted">Chưa đủ từ trong cấp độ này để tạo bài (cần ít nhất 4 từ).</p>';
+  $("quizQuestions").innerHTML=curQuiz.length?curQuiz.map((q,i)=>`<div style="padding:15px 0;border-bottom:1px solid var(--line)"><b>${i+1}. ${esc(q.q)}</b>${q.say?` <button type="button" class="btn small" data-say="${esc(q.say)}">🔊 Nghe</button>`:""}<div class="options">${q.opts.map((o,j)=>`<label class="option"><input type="radio" name="q${i}" value="${j}"> ${esc(o.t)}</label>`).join("")}</div></div>`).join(""):'<p class="muted">Chưa đủ từ trong cấp độ này để tạo bài (cần ít nhất 4 từ).</p>';
 }
 function renderQuiz(){if(!curQuiz.length||quizDone)newQuiz();renderHistory()}
 function renderHistory(){$("quizHistory").innerHTML=state.quiz.length?state.quiz.slice(-10).reverse().map(x=>`${esc(x.date)}: <b>${x.score}/${x.total||5}</b>${x.label?" · "+esc(x.label):""}`).join("<br>"):"Chưa có bài kiểm tra."}
@@ -567,11 +597,68 @@ function submitQuiz(){
   });
   quizDone=true;$("quizSubmit").disabled=true;
   state.quiz.push({date:today(),score,total:curQuiz.length,label:quizLabel});save();
-  $("quizResult").innerHTML=`<div class="exercise"><h2>Kết quả: ${score}/${curQuiz.length} (${Math.round(score/curQuiz.length*100)}%)</h2>${detail.join("")}</div>`;
+  $("quizResult").innerHTML=`<div class="exercise"><h2>Kết quả: ${score}/${curQuiz.length} (${Math.round(score/curQuiz.length*100)}%)</h2>${detail.join("")}</div>${quizAdvice(score,curQuiz.length,$("quizSource").value)}`;
   renderHistory();toast("Đã lưu kết quả kiểm tra");
 }
 $("quizSubmit").addEventListener("click",submitQuiz);$("quizNew").addEventListener("click",()=>{newQuiz();window.scrollTo(0,0)});
 ["quizSource","quizLevel","quizNum"].forEach(id=>$(id).addEventListener("change",newQuiz));
+
+
+/* ===== NGHE – PHÁT ÂM – QUIZ MỞ RỘNG ===== */
+function say(t,r){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="zh-CN";u.rate=r||+($("spRate")?$("spRate").value:.85);speechSynthesis.speak(u)}catch(e){toast("Thiết bị chưa hỗ trợ giọng đọc")}}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-say]");if(b)say(b.dataset.say)});
+(function(){const q=$("quizSource");[["listen","Nghe hiểu (nghe → chọn nghĩa)"],["tone","Nghe – chọn pinyin đúng"],["gram","Ngữ pháp theo cấp độ"]].forEach(o=>q.add(new Option(o[1],o[0])))})();
+const gramBank=[
+{l:"1",q:"Cách nói đúng “Tôi không có tiền”?",o:["我没有钱。","我不有钱。","我有不钱。","我没钱有。"],w:"Phủ định của 有 là 没有, không dùng 不有."},
+{l:"1",q:"Câu nào đúng?",o:["我很好。","我是好。","我是很好。","我好是。"],w:"Tính từ làm vị ngữ đi với 很, không dùng 是."},
+{l:"1",q:"Phủ định của “我吃了饭” (Tôi đã ăn cơm)?",o:["我没吃饭。","我没吃了饭。","我不吃了饭。","我吃没饭。"],w:"Hành động đã xảy ra: dùng 没 và bỏ 了."},
+{l:"2",q:"“Anh ấy cao hơn tôi” là?",o:["他比我高。","他比我很高。","他很比我高。","他我比高。"],w:"A + 比 + B + tính từ; không thêm 很 trước tính từ."},
+{l:"2",q:"“Tôi chưa từng đến Bắc Kinh” là?",o:["我没去过北京。","我不去过北京。","我没去了北京。","我去没过北京。"],w:"Phủ định kinh nghiệm: 没 + động từ + 过."},
+{l:"2",q:"“Cô ấy hát rất hay” là?",o:["她唱得很好。","她唱很好得。","她得唱很好。","她唱的很好得。"],w:"Bổ ngữ trạng thái: động từ + 得 + (很) + tính từ."},
+{l:"3",q:"“Tôi để sách lên bàn” là?",o:["我把书放在桌子上。","我把放书在桌子上。","我书把放在桌子上。","我放把书在桌子上。"],w:"Chủ ngữ + 把 + tân ngữ + động từ + thành phần khác."},
+{l:"3",q:"“Điện thoại của tôi bị trộm” là?",o:["我的手机被偷了。","我的手机偷被了。","被我的手机偷了。","我的手机把偷了。"],w:"Vật + 被 + (người) + động từ + thành phần khác."},
+{l:"3",q:"“Trời ngày càng lạnh” là?",o:["天气越来越冷。","天气越冷越来。","天气来越冷越。","天气越来冷越。"],w:"越来越 + tính từ = ngày càng."},
+{l:"4",q:"他不但会说汉语，____会说英语。",o:["而且","所以","但是","因为"],w:"不但…而且… = không những… mà còn…"},
+{l:"4",q:"Điền cặp từ: “____努力，____能成功” (điều kiện duy nhất).",o:["只有…才","只要…才","只有…就","虽然…才"],w:"只有…才…: chỉ khi; 只要…就…: chỉ cần."},
+{l:"4",q:"连小孩子____知道。",o:["都","才","和","把"],w:"连…都/也… = ngay cả… cũng…"},
+{l:"5",q:"无论多忙，他____坚持锻炼。",o:["都","才","却","把"],w:"无论…都… = bất kể… đều…"},
+{l:"5",q:"与其等待，____行动。",o:["不如","所以","而且","即使"],w:"与其…不如… = thà… còn hơn…"},
+{l:"5",q:"他之所以成功，____因为一直努力。",o:["是","不","就","把"],w:"之所以…是因为… = sở dĩ… là vì…"}];
+function extraQ(src,L,n){
+  if(src==="gram")return shuffle(gramBank.filter(g=>g.l===L)).slice(0,n).map(g=>({q:g.q,why:g.w,opts:shuffle(g.o.map((t,i)=>({t,ok:i===0})))}));
+  const pool=poolFor(L).filter(v=>v[1]&&v[0].length<=4),out=[];
+  for(const v of shuffle(pool)){if(out.length>=n)break;
+    const oth=shuffle(pool.filter(x=>x!==v&&(src==="tone"?x[1]!==v[1]:shortVi(x)!==shortVi(v)))).slice(0,3);if(oth.length<3)continue;
+    if(src==="listen")out.push({say:v[0],q:"Nghe và chọn nghĩa đúng",why:`${v[0]} (${v[1]}): ${v[2]}`,opts:shuffle([{t:shortVi(v),ok:true},...oth.map(o=>({t:shortVi(o),ok:false}))])});
+    else out.push({say:v[0],q:"Nghe và chọn pinyin đúng (chú ý thanh điệu)",why:`${v[0]} đọc là ${v[1]} — ${v[2]}`,opts:shuffle([{t:v[1],ok:true},...oth.map(o=>({t:o[1],ok:false}))])});
+  }return out}
+function quizAdvice(score,total,src){
+  const p=Math.round(score/total*100);
+  const tier=p>=90?["🏆 Xuất sắc","Em nắm rất chắc. Hãy nâng độ khó: chuyển lên cấp tiếp theo hoặc tăng lên 20 câu."]:p>=70?["👍 Khá tốt","Nền tảng ổn. Xem lại các câu sai ở trên và làm lại bài mới sau 1–2 ngày để củng cố."]:p>=50?["⚠ Trung bình","Còn nhiều lỗ hổng. Cần ôn có hệ thống trước khi lên cấp mới."]:["🔴 Cần cải thiện nhiều","Đừng nản — đây là dấu hiệu cần quay lại kiến thức nền và học chậm, chắc hơn."];
+  const T={found:["Ôn lại bài Pinyin, 4 thanh điệu và quy tắc biến điệu (不, 一, 3+3) ở mục Bài học – Foundation.","Mỗi ngày nghe–đọc theo 10 phút ở mục Nghe & phát âm.","Học thuộc câu mẫu 是 / 吗 / 什么 / 不 / 很."],vocab:["Dùng Flashcards 15 phút mỗi ngày, chỉ ôn từ ‘chưa thuộc’ (lặp lại ngắt quãng: hôm nay – ngày mai – 3 ngày – 7 ngày).","Học từ trong câu ví dụ, không học chữ rời.","Viết lại 5 từ sai nhiều nhất kèm pinyin và một câu của riêng em."],listen:["Nghe chậm (0.6×) rồi tăng dần tốc độ ở mục Nghe & phát âm.","Nghe xong hãy nói lại (shadowing) trước khi xem chữ.","Chú ý thanh điệu: thanh sai là nguyên nhân chính khiến nghe nhầm từ."],tone:["Luyện cặp tối thiểu (zh/z, j/q/x, in/ing…) ở mục Nghe & phát âm.","Đọc to từng từ, vẽ ‘đường cong’ của thanh điệu bằng tay.","Làm Chính tả nghe mỗi ngày 5 từ, đối chiếu cả thanh điệu."],gram:["Đọc lại bài ngữ pháp của đúng cấp độ này ở trang Ngữ pháp, đặc biệt phần Cấu trúc.","Tự đặt 2 câu mới cho mỗi mẫu câu sai.","Học theo cụm cố định (如果…就…, 不但…而且…) chứ không dịch từng chữ."]}[src]||[];
+  return `<div class="exercise" style="margin-top:14px"><h3>老师 nhận xét: ${tier[0]} (${p}%)</h3><p>${tier[1]}</p>${p<70?`<b>Giải pháp & đề xuất cải thiện:</b><ul>${T.map(x=>`<li>${x}</li>`).join("")}<li><b>Kế hoạch 7 ngày:</b> mỗi ngày 20 phút = 10 phút ôn phần sai + 5 phút nghe/đọc + 5 phút làm lại quiz; sau 7 ngày kiểm tra lại, mục tiêu ≥ 70%.</li></ul>`:`<ul>${T.slice(0,1).map(x=>`<li>Gợi ý duy trì: ${x}</li>`).join("")}</ul>`}</div>`}
+
+/* Nghe & phát âm: nội dung bổ sung */
+(function(){
+  const pairs=[["zh / z","知 zhī","资 zī"],["ch / c","吃 chī","刺 cì"],["sh / s","诗 shī","丝 sī"],["j / q / x","鸡 jī","七 qī","西 xī"],["n / l","你 nǐ","李 lǐ"],["in / ing","心 xīn","星 xīng"],["en / eng","门 mén","梦 mèng"],["u / ü","路 lù","绿 lǜ"]];
+  const btn=x=>`<button class="btn ghost small" data-say="${x.split(" ")[0]}">${x}</button>`;
+  const box=document.createElement("div");
+  box.innerHTML=`<h3>Tốc độ nghe</h3><select class="field" id="spRate"><option value="0.6">Chậm 0.6×</option><option value="0.85" selected>Vừa 0.85×</option><option value="1">Bình thường 1×</option></select>
+  <h3>Cặp âm dễ nhầm (bấm để nghe)</h3>${pairs.map(p=>`<p><b>${p[0]}</b> &nbsp; ${p.slice(1).map(btn).join(" ")}</p>`).join("")}
+  <h3>Quy tắc biến điệu</h3><div class="example"><p><b>3 + 3 → 2 + 3:</b> 你好 đọc ní hǎo ${btn("你好 ní hǎo")}</p><p><b>不</b> + thanh 4 → bú: ${btn("不是 bú shì")} · còn lại bù: ${btn("不好 bù hǎo")}</p><p><b>一</b> + thanh 4 → yí: ${btn("一个 yí gè")} · + thanh 1/2/3 → yì: ${btn("一杯 yì bēi")}</p></div>
+  <h3>Luyện nói nhanh (绕口令)</h3><p class="cn" lang="zh-CN" style="font-size:20px">四是四，十是十，十四是十四，四十是四十。</p><p class="py">Sì shì sì, shí shì shí, shísì shì shísì, sìshí shì sìshí.</p><button class="btn small" data-say="四是四，十是十，十四是十四，四十是四十。">🔊 Nghe</button> <span class="muted">Đọc chậm trước, tăng dần tốc độ; chú ý phân biệt s / sh.</span>
+  <h3>Chính tả nghe</h3><div class="toolbar"><select class="field" id="dicLv"><option value="F">Foundation</option><option value="1" selected>HSK 1</option><option value="2">HSK 2</option><option value="3">HSK 3</option><option value="4">HSK 4</option><option value="5">HSK 5</option></select><button class="btn small" id="dicNew">▶ Từ mới</button><button class="btn ghost small" id="dicHear">🔊 Nghe lại</button></div><div class="toolbar"><input class="field" id="dicIn" placeholder="Gõ pinyin (có dấu thanh càng tốt) hoặc chữ Hán" style="flex:1"><button class="btn green small" id="dicChk">Kiểm tra</button></div><div id="dicOut" class="muted"></div>`;
+  $("toneDrill").parentNode.appendChild(box);
+  let w=null,ok=0,tot=0;const norm=x=>x.normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-zA-Z]/g,"").toLowerCase(),nf=x=>x.normalize("NFC").toLowerCase().replace(/[\s']/g,"");
+  const nw=()=>{const p=poolFor($("dicLv").value).filter(v=>v[1]&&v[0].length<=4);if(!p.length)return;w=p[Math.floor(Math.random()*p.length)];$("dicIn").value="";$("dicOut").textContent="Nghe và gõ lại.";say(w[0])};
+  $("dicNew").onclick=nw;$("dicHear").onclick=()=>w&&say(w[0]);
+  $("dicChk").onclick=()=>{if(!w)return nw();const v=$("dicIn").value.trim();tot++;let r;
+    if(v===w[0]||nf(v)===nf(w[1]))r="✓ Chuẩn, đúng cả thanh điệu!",ok++;
+    else if(norm(v)===norm(w[1]))r="◐ Đúng âm nhưng chưa đúng thanh điệu — nghe lại và chú ý đường cao độ.";
+    else r="✗ Chưa đúng — nghe lại, tách âm đầu / vần / thanh điệu.";
+    const p=Math.round(ok/tot*100);
+    $("dicOut").innerHTML=`${r}<br>Đáp án: <b>${esc(w[0])}</b> ${esc(w[1])} — ${esc(w[2])}<br>Phiên này: ${ok}/${tot} (${p}%)`+(tot>=5&&p<60?`<br><b>Đề xuất:</b> hạ tốc độ xuống 0.6×, luyện lại cặp âm dễ nhầm và 4 thanh điệu, rồi thử lại.`:"")};
+})();
 
 /* ===== PLANNER ===== */
 const plan=[["Ôn từ vựng",15],["Bài học mới",30],["Từ vựng & chữ Hán",20],["Ngữ pháp & đặt câu",20],["Nghe & nói",25],["Kiểm tra nhanh",10]];
@@ -623,6 +710,7 @@ const hints=[["吗","Có 吗 ở cuối → câu hỏi có/không."],["什么","
 let practiceCur=null;
 function tutorAction(){
   const mode=$("tutorMode").value,x=$("tutorInput").value.trim(),out=$("tutorOutput");
+  if(["check","dict","gsearch","order"].includes(mode))return tutorExtra(mode,x,out);
   if(mode==="practice"){
     practiceCur=sentences[Math.floor(Math.random()*sentences.length)];
     out.innerHTML=`<b>Dịch sang tiếng Trung:</b> “${esc(practiceCur[2])}”<div class="toolbar"><input class="field" id="pracInput" lang="zh-CN" placeholder="Nhập câu tiếng Trung..." style="flex:1"><button class="btn small" id="pracCheck">Kiểm tra</button><button class="btn ghost small" id="pracShow">Xem đáp án</button></div><div id="pracMsg"></div>`;
@@ -639,12 +727,46 @@ function tutorAction(){
     if(hit){out.innerHTML=`<b>${esc(hit[0])}</b><div class="py">${esc(hit[1])}</div><div>${esc(hit[2])}</div>`;return}
     out.innerHTML=`<b>Dịch từng từ (không phải bản dịch hoàn chỉnh):</b><div>${tokHtml(toks)}</div>${unk?`<p class="muted">Có ${unk} chữ chưa có trong kho từ vựng.</p>`:""}`;return;
   }
-  const hs=hints.filter(h=>x.includes(h[0])).map(h=>`<li>${esc(h[1])}</li>`).join("");
-  out.innerHTML=`<b>Phân tích:</b><div>${tokHtml(toks)}</div>${hit?`<p><span class="py">${esc(hit[1])}</span><br>${esc(hit[2])}</p>`:""}${hs?`<b>Ghi chú ngữ pháp</b><ul>${hs}</ul>`:""}${unk?`<p class="muted">Có ${unk} chữ chưa có trong kho từ vựng nên chưa phân tích được.</p>`:""}`;
+  const hs=patHits(x).map(h=>`<li><b>${esc(h[1])}</b>: ${esc(h[2])}${h[3]?` <a href="#lesson-${h[3]}">Xem bài →</a>`:""}</li>`).join("");
+  out.innerHTML=`<b>Phân tích:</b><div>${tokHtml(toks)}</div><p><span class="py">${esc(toks.map(t=>t.unk?t.w:t.py).join(" "))}</span> · <i>${esc(sentType(x))}</i> <button class="btn small" data-say="${esc(x)}">🔊 Nghe</button></p>${hit?`<p><span class="py">${esc(hit[1])}</span><br>${esc(hit[2])}</p>`:""}${hs?`<b>Ghi chú ngữ pháp</b><ul>${hs}</ul>`:""}${unk?`<p class="muted">Có ${unk} chữ chưa có trong kho từ vựng nên chưa phân tích được.</p>`:""}`;
 }
+
+/* ===== TRỢ LÝ: MỞ RỘNG ===== */
+const PAT=[[/你好/,"你好","hai thanh 3 liền nhau → đọc ní hǎo",""],[/吗/,"Câu hỏi 吗","đặt cuối câu trần thuật, hỏi có/không","g3"],[/呢/,"呢","hỏi lại “còn… thì sao?”","g3"],[/什么|谁|哪|几|多少|怎么/,"Từ nghi vấn","đứng đúng vị trí thành phần được hỏi, không thêm 吗","g3"],[/不/,"Phủ định 不","đứng trước động từ/tính từ; 不 → bú trước thanh 4",""],[/没/,"没(有)","phủ định 有, hoặc hành động đã xảy ra (bỏ 了)","g1"],[/有/,"有","có / tồn tại: Nơi chốn + 有 + vật","g1"],[/很|太|非常/,"Phó từ mức độ","tính từ vị ngữ đi với 很, không dùng 是","g8"],[/也|都/,"也 / 都","đứng sau chủ ngữ, trước vị ngữ; 也 đứng trước 都","g8"],[/的/,"的","A 的 B = B của A","g8"],[/了/,"了","hoàn thành / thay đổi trạng thái","g5"],[/正在|在.{1,6}(看|吃|写|做|学习)/,"在 / 正在","hành động đang diễn ra","g5"],[/会|能|可以|想|要/,"Động từ năng nguyện","đứng trước động từ chính; phủ định đặt 不 trước nó","g6"],[/在.{0,4}[上下里外前后]/,"Phương vị","vật + 在 + nơi chốn + phương vị","g7"],[/比/,"So sánh 比","A + 比 + B + tính từ (không thêm 很)","g9"],[/(去|吃|看|学|见|来|到|做|说)过/,"Kinh nghiệm 过","động từ + 过 = đã từng","g10"],[/[唱说跑写做吃学看玩]得/,"Bổ ngữ trạng thái 得","động từ + 得 + (很) + tính từ","g11"],[/快要|就要|快.{1,4}了/,"Sắp xảy ra","(快)要 + động từ + 了","g12"],[/因为|所以|但是|可是/,"Nguyên nhân – kết quả / chuyển ý","因为…所以…, 但是…","g13"],[/把/,"Câu 把","Chủ ngữ + 把 + tân ngữ + động từ + thành phần khác","g14"],[/被/,"Câu bị động 被","Vật + 被 + (người) + động từ + …","g15"],[/(如果|要是).*就/,"如果…就…","điều kiện: nếu… thì…","g16"],[/虽然.*(但|可)/,"虽然…但是…","tuy… nhưng…","g17"],[/越来越|越.+越/,"越来越 / 越…越…","ngày càng / càng… càng…","g18"],[/(不但|不仅).*而且/,"不但…而且…","không những… mà còn…","g19"],[/只要.*就|只有.*才/,"只要…就… / 只有…才…","điều kiện đủ / điều kiện duy nhất","g20"],[/连.*(都|也)/,"连…都/也…","ngay cả… cũng…","g21"],[/(即使|就算).*也/,"即使…也…","cho dù… cũng…","g22"],[/既然.*就/,"既然…就…","đã… thì…","g23"],[/(无论|不管).*都/,"无论…都…","bất kể… đều…","g24"],[/尽管/,"尽管","mặc dù… vẫn…","g25"],[/与其.*不如/,"与其…不如…","thà… còn hơn…","g26"],[/之所以/,"之所以…是因为…","sở dĩ… là vì…","g27"],[/不是.*而是/,"不是…而是…","không phải… mà là…","g28"]];
+const patHits=x=>PAT.filter(p=>p[0].test(x));
+const sentType=x=>/[吗呢？?]|什么|谁|哪|几|多少|怎么/.test(x)?"câu hỏi":/！|!/.test(x)?"câu cảm thán / mệnh lệnh":/不|没/.test(x)?"câu phủ định":"câu trần thuật";
+const ERR=[[/是很?(好|高兴|累|忙|大|小|贵|漂亮|冷|热)/,"Tính từ làm vị ngữ không dùng 是.","Dùng 很: 我很好 (không nói 我是好).","g8"],[/不有/,"Phủ định của 有 là 没有.","Sửa: 没有.","g1"],[/比.{0,6}(很|非常|太)/,"Câu 比 không thêm 很/非常/太 trước tính từ.","Dùng 更 / 还: 他比我更高; hoặc bỏ 很: 他比我高.","g9"],[/没(吃|去|看|学|买|做|喝)[^，。？！]*了[。！]?$/,"Phủ định hành động đã xảy ra: 没 + động từ, bỏ 了.","Ví dụ: 我没吃饭.","g5"],[/(吗.*(什么|谁|哪)|(什么|谁|哪).*吗)/,"Không dùng 吗 cùng từ nghi vấn.","Bỏ 吗: 你叫什么名字？","g3"],[/[一两三四五六七八九十](学生|朋友|苹果|老师|书|猫|狗|水)/,"Thiếu lượng từ giữa số và danh từ.","Ví dụ: 三本书, 一杯水, 两个朋友.","g2"],[/二(个|本|只|杯|件|块)/,"Trước lượng từ dùng 两, không dùng 二.","Sửa: 两个 / 两本…","g2"],[/都也/,"Thứ tự sai: 也 đứng trước 都.","Sửa: 也都.","g8"],[/很非常|非常很|很太|太很/,"Không chồng hai phó từ mức độ.","Chỉ dùng một: 很 / 非常 / 太.","g8"]];
+const rmD=t=>t.normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/đ/g,"d").toLowerCase();
+let ordCur=null;
+function tutorExtra(mode,x,out){
+  if(mode==="check"){
+    if(!/[\u4e00-\u9fff]/.test(x)){out.textContent="Hãy nhập một câu tiếng Trung cần kiểm tra.";return}
+    const er=ERR.filter(e=>e[0].test(x)),toks=segment(x),unk=toks.filter(t=>t.unk).length;
+    out.innerHTML=`<b>Kết quả kiểm tra:</b> <span class="cn" style="font-size:20px">${esc(x)}</span>`+(er.length?`<ul>${er.map(e=>`<li>✗ ${esc(e[1])}<br><b>Cách sửa:</b> ${esc(e[2])} <a href="#lesson-${e[3]}">Xem bài →</a></li>`).join("")}</ul>`:`<p>✓ Chưa phát hiện lỗi thuộc ${ERR.length} nhóm lỗi thường gặp. Công cụ chỉ kiểm tra các lỗi phổ biến, chưa thay thế giáo viên.</p>`)+`<b>Đối chiếu mẫu ngữ pháp</b><ul>${patHits(x).map(h=>`<li>${esc(h[1])}: ${esc(h[2])}</li>`).join("")||"<li>Không nhận ra mẫu đặc biệt.</li>"}</ul>${unk?`<p class="muted">Có ${unk} chữ chưa có trong kho từ vựng.</p>`:""}`;return}
+  if(mode==="dict"){
+    if(!x){out.textContent="Nhập chữ Hán, pinyin (không cần dấu) hoặc nghĩa tiếng Việt.";return}
+    const q=rmD(x),han=/[\u4e00-\u9fff]/.test(x);
+    const r=vocab.filter(v=>han?v[0].includes(x):(rmD(v[1]).replace(/\s/g,"")===q.replace(/\s/g,"")||rmD(v[1]).replace(/\s/g,"").startsWith(q.replace(/\s/g,""))||rmD(v[2]).includes(q))).sort((a,b)=>(a[0]===x||rmD(a[1])===q?0:1)-(b[0]===x||rmD(b[1])===q?0:1)).slice(0,10);
+    out.innerHTML=r.length?r.map(v=>`<div class="tok" style="display:block;margin:8px 0"><span class="cn" style="font-size:24px">${esc(v[0])}</span> <span class="py">${esc(v[1])}</span> <button class="btn small" data-say="${esc(v[0])}">🔊</button><div>${esc(v[2])} · <i>${esc(v[3]||"")}</i> · HSK 2.0: ${v[4]||"–"} / 3.0: ${v[5]||"–"}</div>${v[7]?`<div class="muted">${esc(v[7])} ${esc(v[8])} — ${esc(v[9])}</div>`:""}</div>`).join(""):"Không tìm thấy trong kho từ vựng.";return}
+  if(mode==="gsearch"){
+    if(!x){out.textContent="Nhập từ khóa, ví dụ: 把, bị động, so sánh, nếu…thì, 因为.";return}
+    const q=rmD(x),strip=h=>rmD(h.replace(/<[^>]+>/g," "));
+    const r=GRAMMAR.filter(g=>strip(g.title+" "+g.goal+" "+g.content).includes(q)),f=grammar.filter(g=>rmD(g.join(" ")).includes(q));
+    out.innerHTML=`<b>Kết quả:</b><ul>${f.map(g=>`<li>[Foundation] ${esc(g[0])} — ${esc(g[1])}</li>`).join("")}${r.map(g=>`<li>[HSK ${g.level}] ${esc(g.title.replace(/^Ngữ pháp HSK \d · /,""))} — ${esc(g.goal)} <a href="#lesson-${g.id}">Xem bài →</a></li>`).join("")}</ul>${f.length+r.length?"":"Không có mục phù hợp."}`;return}
+  if(mode==="order"){
+    const c=sentences.filter(s=>{const t=segment(s[0]);return t.length>=3&&t.length<=7&&!t.some(k=>k.unk)});
+    ordCur=c[Math.floor(Math.random()*c.length)];const toks=shuffle(segment(ordCur[0]).map(t=>t.w));let ans=[];
+    out.innerHTML=`<b>Sắp xếp thành câu đúng:</b> “${esc(ordCur[2])}”<div id="ordPool" style="margin:10px 0"></div><div class="example" id="ordAns" style="min-height:34px"></div><div class="toolbar"><button class="btn small" id="ordChk">Kiểm tra</button><button class="btn ghost small" id="ordRst">Làm lại</button></div><div id="ordMsg"></div>`;
+    const draw=()=>{$("ordPool").innerHTML=toks.map((w,i)=>ans.includes(i)?"":`<button class="btn ghost small cn" data-i="${i}">${esc(w)}</button> `).join("");$("ordAns").textContent=ans.map(i=>toks[i]).join(" ")};
+    $("ordPool").onclick=e=>{const b=e.target.closest("[data-i]");if(b){ans.push(+b.dataset.i);draw()}};
+    $("ordRst").onclick=()=>{ans=[];$("ordMsg").textContent="";draw()};
+    $("ordChk").onclick=()=>{const v=ans.map(i=>toks[i]).join("");$("ordMsg").innerHTML=v===stripP(ordCur[0])?`✅ Chính xác! <span class="py">${esc(ordCur[1])}</span>`:`❌ Chưa đúng. Gợi ý: xác định chủ ngữ → (phó từ/thời gian) → động từ → tân ngữ. Đáp án: <b>${esc(ordCur[0])}</b>`};
+    draw()}
+}
+
 $("tutorGo").addEventListener("click",tutorAction);
 $("tutorInput").addEventListener("keydown",e=>{if(e.key==="Enter")tutorAction()});
-$("tutorMode").addEventListener("change",()=>{$("tutorInput").disabled=$("tutorMode").value==="practice"});
+$("tutorMode").addEventListener("change",()=>{$("tutorInput").disabled=["practice","order"].includes($("tutorMode").value)});
 
 /* ===== KHỞI ĐỘNG ===== */
 showTimer();
